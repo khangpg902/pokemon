@@ -1,0 +1,408 @@
+[
+    {
+        "Id": 1,
+        "Name": "Bulbasaur",
+        "Elements": [
+            "grass",
+            "poison"
+        ],
+        "EV": 0,
+        "Stats": {
+            "HP": 45,
+            "Attack": 49,
+            "Defense": 49,
+            "Speed": 45,
+            "Sp_Attack": 65,
+            "Sp_Defense": 65
+        },
+        "Profile": {
+            "Height": 0.7,
+            "Weight": 6.9,
+            "CatchRate": 0,
+            "GenderRatio": {
+                "MaleRatio": 87.5,
+                "FemaleRatio": 12.5
+            },
+            "EggGroup": "]Monster, Grass",
+            "HatchSteps": 5100,
+            "Abilities": "Chlorophyll, Overgrow"
+        },
+        "DamegeWhenAttacked": [
+            {
+                "Element": "ground",
+                "Coefficient": 2
+            },
+            {
+                "Element": "fighting",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "psychic",
+                "Coefficient": 2
+            },
+            {
+                "Element": "fairy",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "flying",
+                "Coefficient": 2
+            },
+            {
+                "Element": "water",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "fire",
+                "Coefficient": 2
+            },
+            {
+                "Element": "electric",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "ice",
+                "Coefficient": 2
+            },
+            {
+                "Element": "grass",
+                "Coefficient": 0.25
+            }
+        ],
+        "EvolutionLevel": 16,
+        "NextEvolution": "Ivysaur",
+        "Moves": []
+    },
+    {
+        "Id": 2,
+        "Name": "Ivysaur",
+        "Elements": [
+            "grass",
+            "poison"
+        ],
+        "EV": 0,
+        "Stats": {
+            "HP": 60,
+            "Attack": 62,
+            "Defense": 63,
+            "Speed": 60,
+            "Sp_Attack": 80,
+            "Sp_Defense": 80
+        },
+        "Profile": {
+            "Height": 1,
+            "Weight": 13,
+            "CatchRate": 0,
+            "GenderRatio": {
+                "MaleRatio": 87.5,
+                "FemaleRatio": 12.5
+            },
+            "EggGroup": "Monster, Grass",
+            "HatchSteps": 5100,
+            "Abilities": "Chlorophyll, Overgrow"
+        },
+        "DamegeWhenAttacked": [
+            {
+                "Element": "ground",
+                "Coefficient": 2
+            },
+            {
+                "Element": "fighting",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "psychic",
+                "Coefficient": 2
+            },
+            {
+                "Element": "fairy",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "flying",
+                "Coefficient": 2
+            },
+            {
+                "Element": "water",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "fire",
+                "Coefficient": 2
+            },
+            {
+                "Element": "electric",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "ice",
+                "Coefficient": 2
+            },
+            {
+                "Element": "grass",
+                "Coefficient": 0.25
+            }
+        ],
+        "EvolutionLevel": 32,
+        "NextEvolution": "Venusaur",
+        "Moves": [
+            {
+                "Name": "Normal Attack",
+                "Element": [
+                    "None"
+                ],
+                "Acc": 90
+            },
+            {
+                "Name": "Special Attack",
+                "Element": [
+                    "grass",
+                    "poison"
+                ],
+                "Acc": 100
+            }
+        ]
+    },
+    {
+        "Id": 3,
+        "Name": "Venusaur",
+        "Elements": [
+            "grass",
+            "poison"
+        ],
+        "EV": 0,
+        "Stats": {
+            "HP": 80,
+            "Attack": 82,
+            "Defense": 83,
+            "Speed": 80,
+            "Sp_Attack": 100,
+            "Sp_Defense": 100
+        },
+        "Profile": {
+            "Height": 2,
+            "Weight": 100,
+            "CatchRate": 0,
+            "GenderRatio": {
+                "MaleRatio": 87.5,
+                "FemaleRatio": 12.5
+            },
+            "EggGroup": "Monster, Grass",
+            "HatchSteps": 5100,
+            "Abilities": "Chlorophyll, Overgrow"
+        },
+        "DamegeWhenAttacked": [
+            {
+                "Element": "ground",
+                "Coefficient": 2
+            },
+            {
+                "Element": "fighting",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "psychic",
+                "Coefficient": 2
+            },
+            {
+                "Element": "fairy",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "flying",
+                "Coefficient": 2
+            },
+            {
+                "Element": "water",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "fire",
+                "Coefficient": 2
+            },
+            {
+                "Element": "electric",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "ice",
+                "Coefficient": 2
+            },
+            {
+                "Element": "grass",
+                "Coefficient": 0.25
+            }
+        ],
+        "EvolutionLevel": 0,
+        "NextEvolution": "",
+        "Moves": [
+            {
+                "Name": "Normal Attack",
+                "Element": [
+                    "None"
+                ],
+                "Acc": 90
+            },
+            {
+                "Name": "Special Attack",
+                "Element": [
+                    "grass",
+                    "poison"
+                ],
+                "Acc": 100
+            }
+        ]
+    },
+    {
+        "Id": 4,
+        "Name": "Charmander",
+        "Elements": [
+            "fire"
+        ],
+        "EV": 0,
+        "Stats": {
+            "HP": 39,
+            "Attack": 52,
+            "Defense": 43,
+            "Speed": 65,
+            "Sp_Attack": 60,
+            "Sp_Defense": 50
+        },
+        "Profile": {
+            "Height": 0.6,
+            "Weight": 8.5,
+            "CatchRate": 0,
+            "GenderRatio": {
+                "MaleRatio": 87.5,
+                "FemaleRatio": 12.5
+            },
+            "EggGroup": "Monster, Dragon",
+            "HatchSteps": 5100,
+            "Abilities": "Blaze, Solar-power"
+        },
+        "DamegeWhenAttacked": [
+            {
+                "Element": "ground",
+                "Coefficient": 2
+            },
+            {
+                "Element": "steel",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "rock",
+                "Coefficient": 2
+            },
+            {
+                "Element": "fire",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "water",
+                "Coefficient": 2
+            },
+            {
+                "Element": "ice",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "fairy",
+                "Coefficient": 0.5
+            }
+        ],
+        "EvolutionLevel": 16,
+        "NextEvolution": "Charmeleon",
+        "Moves": [
+            {
+                "Name": "Normal Attack",
+                "Element": [
+                    "None"
+                ],
+                "Acc": 100
+            },
+            {
+                "Name": "Special Attack",
+                "Element": [
+                    "fire"
+                ],
+                "Acc": 100
+            }
+        ]
+    },
+    {
+        "Id": 5,
+        "Name": "Charmeleon",
+        "Elements": [
+            "fire"
+        ],
+        "EV": 0,
+        "Stats": {
+            "HP": 58,
+            "Attack": 64,
+            "Defense": 58,
+            "Speed": 80,
+            "Sp_Attack": 80,
+            "Sp_Defense": 65
+        },
+        "Profile": {
+            "Height": 1.1,
+            "Weight": 19,
+            "CatchRate": 0,
+            "GenderRatio": {
+                "MaleRatio": 87.5,
+                "FemaleRatio": 12.5
+            },
+            "EggGroup": "Monster, Dragon",
+            "HatchSteps": 5100,
+            "Abilities": "Blaze, Solar-power"
+        },
+        "DamegeWhenAttacked": [
+            {
+                "Element": "ground",
+                "Coefficient": 2
+            },
+            {
+                "Element": "steel",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "rock",
+                "Coefficient": 2
+            },
+            {
+                "Element": "fire",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "water",
+                "Coefficient": 2
+            },
+            {
+                "Element": "ice",
+                "Coefficient": 0.5
+            },
+            {
+                "Element": "fairy",
+                "Coefficient": 0.5
+            }
+        ],
+        "EvolutionLevel": 36,
+        "NextEvolution": "Charizard",
+        "Moves": [
+            {
+                "Name": "Normal Attack",
+                "Element": [
+                    "None"
+                ],
+                "Acc": 100
+            },
+            {
+                "Name": "Special Attack",
+                "Element": [
+                    "fire"
+                ],
+                "Acc": 100
+            }
+        ]
+    }
+]
