@@ -105,6 +105,13 @@ func main() {
 				fmt.Println("Error sending movement message to client:", err)
 			}
 
+		case "INVENTORY":
+			// Send inventory details to the player
+			inventoryDetails := getPlayerInventory(idStr)
+			_, err := conn.WriteToUDP([]byte(inventoryDetails), addr)
+			if err != nil {
+				fmt.Println("Error sending inventory to client:", err)
+			}
 		}
 	}
 }

@@ -284,6 +284,7 @@ func SavePlayerData(player *Player) error {
 		return err
 	}
 
+	// Create a unique file for the player using their ID (e.g., playerID.json)
 	filename := fmt.Sprintf("%s.json", player.Name)
 	// Write the player data to their specific file
 	err = os.WriteFile(filename, updatedData, 0666)
@@ -316,6 +317,7 @@ func LoadPlayerData(playerID string) (*Player, error) {
 	return &player, nil
 }
 
+// HandlePlayerLogin checks if the player exists, and either loads or creates their data file
 func HandlePlayerLogin(idStr, playerName string, x, y int, conn *net.UDPConn, addr *net.UDPAddr) *Player {
 	// File name based on player's name
 	playerFileName := playerName + ".json"
@@ -354,4 +356,18 @@ func HandlePlayerLogin(idStr, playerName string, x, y int, conn *net.UDPConn, ad
 	players[idStr] = player
 
 	return player
+}
+
+// Dummy function to get player inventory
+func getPlayerInventory(idStr string) string {
+	player, exists := players[idStr]
+	if !exists {
+		return fmt.Sprintf("Player with ID %s does not exist", idStr)
+	}
+
+	var inventoryInfo string
+	for _, inv := range player.Inventory {
+		inventoryInfo += fmt.Sprintf("Item: %s, Level: %d\n", inv.Name, inv.Level)
+	}
+	return inventoryInfo
 }
