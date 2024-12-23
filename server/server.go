@@ -2,83 +2,30 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"net"
+	"strconv"
 	"strings"
-	"sync"
 )
-
-type Stats struct {
-	HP         float32 `json:"HP"`
-	Attack     float32 `json:"Attack"`
-	Defense    float32 `json:"Defense"`
-	Speed      int     `json:"Speed"`
-	Sp_Attack  float32 `json:"Sp_Attack"`
-	Sp_Defense float32 `json:"Sp_Defense"`
-}
-
-type GenderRatio struct {
-	MaleRatio   float32 `json:"MaleRatio"`
-	FemaleRatio float32 `json:"FemaleRatio"`
-}
-
-type Profile struct {
-	Height      float32     `json:"Height"`
-	Weight      float32     `json:"Weight"`
-	CatchRate   float32     `json:"CatchRate"`
-	GenderRatio GenderRatio `json:"GenderRatio"`
-	EggGroup    string      `json:"EggGroup"`
-	HatchSteps  int         `json:"HatchSteps"`
-	Abilities   string      `json:"Abilities"`
-}
-
-type DamegeWhenAttacked struct {
-	Element     string  `json:"Element"`
-	Coefficient float32 `json:"Coefficient"`
-}
-
-type Moves struct {
-	Name    string   `json:"Name"`
-	Element []string `json:"Element"`
-	Acc     int      `json:"Acc"`
-}
-
-type Pokemon struct {
-	Id                 int                  `json:"Id"`
-	Name               string               `json:"Name"`
-	Elements           []string             `json:"Elements"`
-	EV                 int                  `json:"EV"`
-	Stats              Stats                `json:"Stats"`
-	Profile            Profile              `json:"Profile"`
-	DamegeWhenAttacked []DamegeWhenAttacked `json:"DamegeWhenAttacked"`
-	EvolutionLevel     int                  `json:"EvolutionLevel"`
-	NextEvolution      string               `json:"NextEvolution"`
-	Moves              []Moves              `json:"Moves"`
-	Exp                int                  `json:"Exp"`
-	Level              int                  `json:"Level"`
-}
-
-type Player struct {
-	Name              string    `json:"Name"`
-	ID                string    `json:"ID"`
-	PlayerCoordinateX int       `json:"PlayerCoordinateX"`
-	PlayerCoordinateY int       `json:"PlayerCoordinateY"`
-	Inventory         []Pokemon `json:"Inventory"`
-	IsTurn            bool
-	Addr              *net.UDPAddr
-	sync.Mutex
-}
-type Pokedex struct {
-	Pokemon     []Pokemon `json:"Pokemon"`
-	CoordinateX int
-	CoordinateY int
-}
-
-var players = make(map[string]*Player)
-var inventory1 = make(map[string]*Pokemon)
-var inventory []Pokemon
 
 func main() {
 
+	// Initialize pokedex with random Pokémon
+	for k := 0; k < 20; k++ {
+		pokemon, err := getRandomPokemon()
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+		pokedex := Pokedex{Pokemon: []Pokemon{*pokemon}}
+		key := strconv.Itoa(k)
+		pokeDexWorld[key] = &pokedex
+		positionofPok(&pokedex)
+		Pokeworld[pokedex.CoordinateX][pokedex.CoordinateY] = "E"
+		fmt.Println("Pokemon:", pokemon.Name, "X:", pokedex.CoordinateX, "Y:", pokedex.CoordinateY)
+	}
+
+	// Set up the UDP server
 	addr, err := net.ResolveUDPAddr("udp", ":8080")
 	if err != nil {
 		panic(err)
@@ -89,18 +36,20 @@ func main() {
 		panic(err)
 	}
 	defer conn.Close()
-	buffer := make([]byte, 1024)
-	for {
 
+	buffer := make([]byte, 1024)
+
+	for {
+		// Read the incoming command from the client
 		n, addr, err := conn.ReadFromUDP(buffer)
 		if err != nil {
 			panic(err)
 		}
 
-		clientAddr := (strings.Replace(addr.String(), ".", "", -1)) // This removes all periods      // This includes IP and port
-		clientAddr = (strings.Replace(clientAddr, ":", "", -1))     // This removes the colon         // This includes IP and port
-		clientAddr = (strings.Replace(clientAddr, " ", "", -1))     // This removes all spaces        // This includes IP and port                // This converts the length to a string // This includes IP and port
-
+		// Extract player ID and command from the received message
+		clientAddr := (strings.Replace(addr.String(), ".", "", -1)) // Remove periods from IP and port
+		clientAddr = (strings.Replace(clientAddr, ":", "", -1))     // Remove colon from IP and port
+		clientAddr = (strings.Replace(clientAddr, " ", "", -1))     // Remove spaces from IP and port
 		idStr := clientAddr
 
 		commands := string(buffer[:n])
@@ -108,19 +57,63 @@ func main() {
 
 		switch strings.ToUpper(parts[0]) {
 		case "CONNECT":
+			// Call HandlePlayerLogin for new or existing players
 			fmt.Println("Unique ID Int:", idStr)
-			players[idStr] = &Player{Name: parts[1], ID: idStr}
+
+			// Get player name from the command
+			playerName := parts[1]
+
+			// Generate random coordinates for the new player
+			x := int(rand.Intn(sizeX))
+			y := int(rand.Intn(sizeY))
+
+			// Call HandlePlayerLogin to load or create player data
+			PokeC := HandlePlayerLogin(playerName, x, y, conn, addr)
+
+			// Send the connection message back to the client
+			connectclient := fmt.Sprintf("Client connected: %s %s ID: %s", playerName, addr, idStr)
+			_, err := conn.WriteToUDP([]byte(connectclient), addr)
+			if err != nil {
+				fmt.Println("Error sending connect message to client:", err)
+			}
+
+			// Send the updated world map to the player
+			_, err = conn.WriteToUDP([]byte(PokeC), addr)
+			if err != nil {
+				fmt.Println("Error sending connect message to client:", err)
+			}
 
 		case "INFO":
-			Info := fmt.Sprintln("Player Info:%s", idStr)
+			// Send player info
+			Info := fmt.Sprintf("Player Info:%s", idStr)
 			_, err := conn.WriteToUDP([]byte(Info), addr)
 			if err != nil {
 				fmt.Println("Error sending connect message to client:", err)
 			}
-			// Display player info...
+
 		case "DISCONNECT":
+			// Handle disconnect
 			fmt.Println("Disconnected from server.")
 			return
+
+		case "UP", "DOWN", "LEFT", "RIGHT":
+			// Handle player movement
+			PokeK := movePlayer(idStr, strings.ToUpper(parts[0]), conn)
+			fmt.Println(PokeK)
+			_, err := conn.WriteToUDP([]byte(PokeK), addr)
+			if err != nil {
+				fmt.Println("Error sending connect message to client:", err)
+			}
+
+		case "INVENTORY":
+			// Send inventory details to the player
+			for _, inv := range players[idStr].Inventory {
+				inventoryDetails := fmt.Sprintf("Player Inventory: Name: %s, Level: %d", inv.Name, inv.Level)
+				_, err := conn.WriteToUDP([]byte(inventoryDetails), addr)
+				if err != nil {
+					fmt.Println("Error sending connect message to client:", err)
+				}
+			}
 		}
 	}
 }
