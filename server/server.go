@@ -159,12 +159,23 @@ func main() {
 			fmt.Println("Disconnected from server.")
 			return
 		case "UP", "DOWN", "LEFT", "RIGHT":
-			PokeK := movePlayer(idStr, strings.ToUpper(parts[0]), conn)
-			fmt.Println(PokeK)
-			_, err := conn.WriteToUDP([]byte(PokeK), addr)
-			if err != nil {
-				fmt.Println("Error sending connect message to client:", err)
+			var PokeK string
+			if len(parts) < 2 {
+				PokeK = movePlayer(idStr, strings.ToUpper(parts[0]), "1", conn)
+			} else {
+				PokeK = movePlayer(idStr, strings.ToUpper(parts[0]), parts[1], conn)
 			}
+			fmt.Println(PokeK)
+			for i := range players {
+				_, err := conn.WriteToUDP([]byte(PokeK), players[i].Addr)
+				if err != nil {
+					fmt.Println("Error sending connect message to client:", err)
+				}
+			}
+			// _, err := conn.WriteToUDP([]byte(PokeK), addr)
+			// if err != nil {
+			// 	fmt.Println("Error sending connect message to client:", err)
+			// }
 		case "INVENTORY":
 			for _, inv := range players[idStr].Inventory {
 				inventoryDetails := fmt.Sprintf("Player Inventory: Name: %s, Level: %d", inv.Name, inv.Level)
@@ -198,7 +209,15 @@ func printWorld(x, y int) string {
 	}
 	return world
 }
+func positionofPok(pokedex *Pokedex) {
 
+	x := rand.IntN(sizeX)
+
+	y := rand.IntN(sizeY)
+
+	pokedex.CoordinateX = int(x)
+	pokedex.CoordinateY = int(y)
+}
 func CheckForPokemonEncounter(player *Player, pokemon *Pokedex) {
 	for _, pokedex := range pokemon.Pokemon {
 		if player.PlayerCoordinateX == pokemon.CoordinateX && player.PlayerCoordinateY == pokemon.CoordinateY {
@@ -209,30 +228,22 @@ func CheckForPokemonEncounter(player *Player, pokemon *Pokedex) {
 	}
 }
 
-func movePlayer(idStr string, direction string, conn *net.UDPConn) string {
+func movePlayer(idStr string, direction string, step string, conn *net.UDPConn) string {
 	player, exists := players[idStr]
 	if !exists {
 		fmt.Println("Player does not exist.")
 
 	}
-	deltaX := map[string]int{"UP": -1, "DOWN": 1}[direction]
+	stepSize, _ := strconv.Atoi(step)
+	deltaX := map[string]int{"UP": -1 * stepSize, "DOWN": 1 * stepSize}[direction]
 	newX := player.PlayerCoordinateX + deltaX
-	deltaY := map[string]int{"LEFT": -1, "RIGHT": 1}[direction]
+	deltaY := map[string]int{"LEFT": -1 * stepSize, "RIGHT": 1 * stepSize}[direction]
 	newY := player.PlayerCoordinateY + deltaY
 	Pokeworld[player.PlayerCoordinateX][player.PlayerCoordinateY] = ""
 
 	PokeK := PokeCat(idStr, player.Name, newX, newY, conn, player.Addr)
 	return PokeK
 
-}
-func positionofPok(pokedex *Pokedex) {
-
-	x := rand.IntN(sizeX)
-
-	y := rand.IntN(sizeY)
-
-	pokedex.CoordinateX = int(x)
-	pokedex.CoordinateY = int(y)
 }
 
 func PokeCat(Id string, playername string, x int, y int, conn *net.UDPConn, Addr *net.UDPAddr) string {
