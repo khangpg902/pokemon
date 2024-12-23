@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"math/rand/v2"
 	"net"
 	"os"
@@ -285,7 +284,7 @@ func SavePlayerData(player *Player) error {
 	}
 
 	// Create a unique file for the player using their ID (e.g., playerID.json)
-	filename := fmt.Sprintf("%s.json", player.Name)
+	filename := fmt.Sprintf("%s.json", player.ID)
 	// Write the player data to their specific file
 	err = os.WriteFile(filename, updatedData, 0666)
 	if err != nil {
@@ -318,56 +317,37 @@ func LoadPlayerData(playerID string) (*Player, error) {
 }
 
 // HandlePlayerLogin checks if the player exists, and either loads or creates their data file
-func HandlePlayerLogin(idStr, playerName string, x, y int, conn *net.UDPConn, addr *net.UDPAddr) *Player {
-	// File name based on player's name
-	playerFileName := playerName + ".json"
-	player := &Player{ID: idStr, Name: playerName, PlayerCoordinateX: x, PlayerCoordinateY: y, Addr: addr}
-
-	// Check if player file exists and load data if present
-	if _, err := os.Stat(playerFileName); err == nil {
-		// Load existing player data from the JSON file
-		data, err := ioutil.ReadFile(playerFileName)
-		if err != nil {
-			fmt.Println("Error reading player file:", err)
-			return nil
+func HandlePlayerLogin(nameOrID string, x int, y int, conn *net.UDPConn, addr *net.UDPAddr) string {
+	// Try to load player data from their specific JSON file
+	existingPlayer, err := LoadPlayerData(nameOrID)
+	if err != nil {
+		// If the player doesn't exist, create a new player
+		fmt.Println("No existing player data found. Creating a new player...")
+		existingPlayer = &Player{
+			Name:              nameOrID,
+			ID:                nameOrID,
+			PlayerCoordinateX: x,
+			PlayerCoordinateY: y,
+			Addr:              addr,
 		}
-		err = json.Unmarshal(data, player)
-		if err != nil {
-			fmt.Println("Error unmarshalling player data:", err)
-			return nil
+		// Save the newly created player data to their specific file
+		if err := SavePlayerData(existingPlayer); err != nil {
+			fmt.Println("Error saving new player data:", err)
+			return "Error"
 		}
-		fmt.Println("Loaded existing player:", playerName)
 	} else {
-		// New player, save to a JSON file
-		data, err := json.Marshal(player)
-		if err != nil {
-			fmt.Println("Error marshalling player data:", err)
-			return nil
+		fmt.Println("Player data loaded successfully.")
+		// Update the player's position and network address
+		existingPlayer.PlayerCoordinateX = x
+		existingPlayer.PlayerCoordinateY = y
+		existingPlayer.Addr = addr
+		// Save the updated player data back to their file
+		if err := SavePlayerData(existingPlayer); err != nil {
+			fmt.Println("Error saving updated player data:", err)
+			return "Error"
 		}
-		err = ioutil.WriteFile(playerFileName, data, 0644)
-		if err != nil {
-			fmt.Println("Error saving player file:", err)
-			return nil
-		}
-		fmt.Println("Created new player file:", playerName)
 	}
 
-	// Save player data to global players map
-	players[idStr] = player
-
-	return player
-}
-
-// Dummy function to get player inventory
-func getPlayerInventory(idStr string) string {
-	player, exists := players[idStr]
-	if !exists {
-		return fmt.Sprintf("Player with ID %s does not exist", idStr)
-	}
-
-	var inventoryInfo string
-	for _, inv := range player.Inventory {
-		inventoryInfo += fmt.Sprintf("Item: %s, Level: %d\n", inv.Name, inv.Level)
-	}
-	return inventoryInfo
+	// After logging in, place the player on the map
+	return PokeCat(nameOrID, existingPlayer.Name, x, y, conn, addr)
 }
