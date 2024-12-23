@@ -8,12 +8,12 @@ import (
 )
 
 type Stats struct {
-	HP         int `json:"HP"`
-	Attack     int `json:"Attack"`
-	Defense    int `json:"Defense"`
-	Speed      int `json:"Speed"`
-	Sp_Attack  int `json:"Sp_Attack"`
-	Sp_Defense int `json:"Sp_Defense"`
+	HP         float32 `json:"HP"`
+	Attack     float32 `json:"Attack"`
+	Defense    float32 `json:"Defense"`
+	Speed      int     `json:"Speed"`
+	Sp_Attack  float32 `json:"Sp_Attack"`
+	Sp_Defense float32 `json:"Sp_Defense"`
 }
 
 type GenderRatio struct {
