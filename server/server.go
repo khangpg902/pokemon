@@ -12,7 +12,6 @@ import (
 func main() {
 	// Seed the random number generator
 	rand.Seed(time.Now().UnixNano()) // Seed for randomness
-
 	// Initialize pokedex with random Pokémon
 	for k := 0; k < 20; k++ {
 		pokemon, err := getRandomPokemon()
@@ -57,6 +56,7 @@ func main() {
 
 		commands := string(buffer[:n])
 		parts := strings.Split(commands, " ")
+		fmt.Println(commands)
 
 		switch strings.ToUpper(parts[0]) {
 		case "CONNECT":

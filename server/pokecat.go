@@ -8,6 +8,7 @@ import (
 	"math/rand/v2"
 	"net"
 	"os"
+	"strconv"
 	"sync"
 )
 
@@ -118,16 +119,28 @@ func CheckForPokemonEncounter(player *Player, pokemon *Pokedex) {
 	}
 }
 
-func movePlayer(idStr string, direction string, conn *net.UDPConn) string {
+func movePlayer(idStr string, direction string, step string, conn *net.UDPConn) string {
+	fmt.Println(idStr)
 	player, exists := players[idStr]
 	if !exists {
 		fmt.Println("Player does not exist.")
 
 	}
-	deltaX := map[string]int{"UP": -1, "DOWN": 1}[direction]
+	stepSize, _ := strconv.Atoi(step)
+	deltaX := map[string]int{"UP": -1 * stepSize, "DOWN": 1 * stepSize}[direction]
 	newX := player.PlayerCoordinateX + deltaX
-	deltaY := map[string]int{"LEFT": -1, "RIGHT": 1}[direction]
+	if newX < 0 {
+		newX = 0
+	} else if newX >= sizeX {
+		newX = sizeX - 1
+	}
+	deltaY := map[string]int{"LEFT": -1 * stepSize, "RIGHT": 1 * stepSize}[direction]
 	newY := player.PlayerCoordinateY + deltaY
+	if newY < 0 {
+		newY = 0
+	} else if newY >= sizeY {
+		newY = sizeY - 1
+	}
 	Pokeworld[player.PlayerCoordinateX][player.PlayerCoordinateY] = ""
 
 	PokeK := PokeCat(idStr, player.Name, newX, newY, conn, player.Addr)
