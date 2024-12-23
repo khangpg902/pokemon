@@ -6,9 +6,12 @@ import (
 	"net"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	// Seed the random number generator
+	rand.Seed(time.Now().UnixNano()) // Seed for randomness
 
 	// Initialize pokedex with random Pokémon
 	for k := 0; k < 20; k++ {
@@ -64,8 +67,8 @@ func main() {
 			playerName := parts[1]
 
 			// Generate random coordinates for the new player
-			x := int(rand.Intn(sizeX))
-			y := int(rand.Intn(sizeY))
+			x := rand.Intn(sizeX)
+			y := rand.Intn(sizeY)
 
 			// Call HandlePlayerLogin to load or create player data
 			PokeC := HandlePlayerLogin(playerName, x, y, conn, addr)
