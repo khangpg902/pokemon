@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand/v2"
 	"net"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -102,7 +104,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 			command := readCommands(conn, addr1)
 			switch command {
 			case "attack":
-				attack(player1Pokemon, player2Pokemon, conn, addr1)
+				attack(player1Pokemon, player2Pokemon, conn, addr1, addr2)
 			case "switch":
 				displaySelectedPokemons(*player1Pokemons, conn, addr1)
 				player1Pokemon = switchToChosenPokemon(*player1Pokemons, conn, addr1)
@@ -112,6 +114,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 				surrender(player1, player2, conn, player1.Addr, player2.Addr)
 				winner = player2
 				loser = player1
+				//addExp(winner, loser, conn, *player2Pokemons, *player1Pokemons)
 				break
 			case "?":
 				displayCommandsList(conn, addr1)
@@ -120,7 +123,6 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 			player1.IsTurn = false
 			player2.IsTurn = true
 		}
-
 		if player2.IsTurn {
 			if !isAlive(player2Pokemon) {
 				fmt.Println(player2Pokemon.Name, "is dead")
@@ -143,7 +145,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 			command := readCommands(conn, addr2)
 			switch command {
 			case "attack":
-				attack(player2Pokemon, player1Pokemon, conn, addr2)
+				attack(player2Pokemon, player1Pokemon, conn, addr2, addr1)
 			case "switch":
 				displaySelectedPokemons(*player2Pokemons, conn, addr2)
 				player2Pokemon = switchToChosenPokemon(*player2Pokemons, conn, addr2)
@@ -153,6 +155,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 				surrender(player2, player1, conn, player2.Addr, player1.Addr)
 				winner = player1
 				loser = player2
+				//addExp(winner, loser, conn, *player1Pokemons, *player2Pokemons)
 				break
 			case "?":
 				displayCommandsList(conn, addr2)
@@ -164,7 +167,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 
 		time.Sleep(500 * time.Millisecond)
 	}
-	addExp(winner, loser, conn)
+	fmt.Printf("%s won against %s \n", winner.Name, loser.Name)
 }
 
 func surrender(loser *Player, winner *Player, conn *net.UDPConn, loserAddr, winnerAddr *net.UDPAddr) {
@@ -173,18 +176,17 @@ func surrender(loser *Player, winner *Player, conn *net.UDPConn, loserAddr, winn
 	conn.WriteToUDP([]byte("You surrendered. You lost.\n"), loserAddr)
 	conn.WriteToUDP([]byte("The enemy surrendered. You win.\n"), winnerAddr)
 }
-func attack(attacker *Pokemon, defender *Pokemon, conn *net.UDPConn, addr *net.UDPAddr) {
+func attack(attacker *Pokemon, defender *Pokemon, conn *net.UDPConn, attackerAddr, defenderAddr *net.UDPAddr) {
 	// Calculate the damage
 	var dmg float32
 	var attackerMove = chooseAttack(*attacker)
 	var attackerDmg = attacker.Stats.Attack
 	fmt.Println(attacker.Name, "chose", attackerMove.Name, "to attack", defender.Name)
-	conn.WriteToUDP([]byte(fmt.Sprintf("%s chose %s to attack %s\n", attacker.Name, attackerMove.Name, defender.Name)), addr)
-
+	conn.WriteToUDP([]byte(fmt.Sprintf("%s chose %s to attack %s\n", attacker.Name, attackerMove.Name, defender.Name)), attackerAddr)
 	switch attackerMove.Name {
-	case "Normal":
+	case "Normal Attack":
 		dmg = float32(attackerDmg - defender.Stats.Defense)
-	case "Special":
+	case "Special Attack":
 		attackingElement := attackerMove.Element
 		dmgWhenAttacked := defender.DamegeWhenAttacked
 		defendingElement := []string{}
@@ -204,20 +206,30 @@ func attack(attacker *Pokemon, defender *Pokemon, conn *net.UDPConn, addr *net.U
 
 		// If the attacker has an element that the defender doesn't have, set the coefficient to 1
 		for _, element := range defendingElement {
-			if !isContain(attackingElement, element) && highestCoefficient < 1 {
+			if !isContain(attackingElement, element) || highestCoefficient == 0 {
 				highestCoefficient = 1
 			}
 		}
 
 		dmg = attackerDmg*highestCoefficient - defender.Stats.Sp_Defense
-	}
 
+	}
 	if dmg < 0 {
 		dmg = 0
 	}
-	fmt.Println(attacker.Name, "attacked", defender.Name, "with", attackerMove.Name, "and dealt", dmg, "damage")
-	conn.WriteToUDP([]byte(fmt.Sprintf("%s attacked %s with %s and dealt %.2f damage\n", attacker.Name, defender.Name, attackerMove.Name, dmg)), addr)
-	defender.Stats.HP -= dmg
+
+	if rand.IntN(100) > attackerMove.Acc {
+		conn.WriteToUDP([]byte(fmt.Sprintf("%s missed!\n", attacker.Name)), attackerAddr)
+		conn.WriteToUDP([]byte(fmt.Sprintf("%s missed!\n", attacker.Name)), defenderAddr)
+	} else {
+		fmt.Println(attacker.Name, "attacked", defender.Name, "with", attackerMove.Name, "and dealt", dmg, "damage")
+		conn.WriteToUDP([]byte(fmt.Sprintf("%s attacked %s with %s and dealt %.2f damage\n", attacker.Name, defender.Name, attackerMove.Name, dmg)), attackerAddr)
+		defender.Stats.HP -= dmg
+		conn.WriteToUDP([]byte(fmt.Sprintf("%s got %.2f HP left\n", defender.Name, defender.Stats.HP)), attackerAddr)
+
+		conn.WriteToUDP([]byte(fmt.Sprintf("%s was attacked and lost %s HP\n %.2f HP left\n", defender.Name, dmg, defender.Stats.HP)), defenderAddr)
+
+	}
 }
 
 func chooseAttack(pokemon Pokemon) Moves {
@@ -382,4 +394,51 @@ func selectPokemon(player *Player, conn *net.UDPConn, addr *net.UDPAddr) *[]Poke
 }
 
 // NOT DONE
-func addExp(winner *Player, loser *Player, conn *net.UDPConn) {}
+func addExp(winner *Player, loser *Player, conn *net.UDPConn, winnerPokemons []Pokemon, loserPokemons []Pokemon) {
+	totalExp := 0
+	for _, pokemon := range loserPokemons {
+		totalExp += pokemon.Exp * pokemon.Level
+	}
+	for _, pokemon := range winnerPokemons {
+		pokemon.Exp += totalExp
+		pokemon.Level = calculateLevel(pokemon.Exp)
+		checkLevel(&pokemon, winner)
+	}
+
+}
+
+func calculateLevel(exp int) int {
+	var level int
+	for i := 1; i < exp; i *= 7 {
+		level += 1
+	}
+	return level
+}
+func checkLevel(pokemon *Pokemon, player *Player) {
+	if pokemon.Level > pokemon.EvolutionLevel && pokemon.EvolutionLevel != 0 {
+		pokemon = getPokemon(pokemon.NextEvolution)
+	}
+	player.Lock() // Lock the player instance
+	defer player.Unlock()
+	player.Inventory = append(player.Inventory, *pokemon)
+}
+func getPokemon(PokemonName string) *Pokemon {
+	// Read the JSON file
+	data, err := os.ReadFile("./lib/pokedex.json")
+	if err != nil {
+		return nil
+	}
+
+	// Unmarshal the JSON data into a slice of Pokemon structs
+	var pokemons []Pokemon
+	err = json.Unmarshal(data, &pokemons)
+	if err != nil {
+		return nil
+	}
+	for i := 0; i < len(pokemons); i++ {
+		if pokemons[i].Name == PokemonName {
+			return &pokemons[i]
+		}
+	}
+	return nil
+}
