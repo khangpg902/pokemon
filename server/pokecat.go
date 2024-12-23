@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"math/rand/v2"
 	"net"
 	"os"
-	"strconv"
 	"sync"
 )
 
@@ -119,34 +117,71 @@ func CheckForPokemonEncounter(player *Player, pokemon *Pokedex) {
 	}
 }
 
-func movePlayer(idStr string, direction string, step string, conn *net.UDPConn) string {
-	fmt.Println(idStr)
-	player, exists := players[idStr]
+func movePlayer(id string, direction string, conn *net.UDPConn, addr *net.UDPAddr) string {
+	// Get the player based on the ID
+	player, exists := players[id]
 	if !exists {
-		fmt.Println("Player does not exist.")
-
+		return fmt.Sprintf("Player with ID %s does not exist", id)
 	}
-	stepSize, _ := strconv.Atoi(step)
-	deltaX := map[string]int{"UP": -1 * stepSize, "DOWN": 1 * stepSize}[direction]
+
+	// Determine the movement step based on direction
+	var deltaX, deltaY int
+
+	switch direction {
+	case "UP":
+		deltaX = -1
+	case "DOWN":
+		deltaX = 1
+	case "LEFT":
+		deltaY = -1
+	case "RIGHT":
+		deltaY = 1
+	default:
+		return fmt.Sprintf("Invalid direction: %s", direction)
+	}
+
+	// Calculate new position
 	newX := player.PlayerCoordinateX + deltaX
+	newY := player.PlayerCoordinateY + deltaY
+
+	// Ensure the new position is within the world bounds
 	if newX < 0 {
 		newX = 0
 	} else if newX >= sizeX {
 		newX = sizeX - 1
 	}
-	deltaY := map[string]int{"LEFT": -1 * stepSize, "RIGHT": 1 * stepSize}[direction]
-	newY := player.PlayerCoordinateY + deltaY
+
 	if newY < 0 {
 		newY = 0
 	} else if newY >= sizeY {
 		newY = sizeY - 1
 	}
+
+	// Update the player's coordinates
+	player.PlayerCoordinateX = newX
+	player.PlayerCoordinateY = newY
+
+	// Clear the old position
 	Pokeworld[player.PlayerCoordinateX][player.PlayerCoordinateY] = ""
 
-	PokeK := PokeCat(idStr, player.Name, newX, newY, conn, player.Addr)
-	return PokeK
+	// Set the new position on the map
+	Pokeworld[newX][newY] = id
 
+	// Check for any Pokemon encounter at the new position
+	for _, pokedex := range pokeDexWorld {
+		CheckForPokemonEncounter(player, pokedex)
+	}
+
+	// Save the updated player data
+	if err := SavePlayerData(player); err != nil {
+		fmt.Println("Error saving player data:", err)
+	}
+
+	// Return the updated world map to the player
+	world := printWorld(newX, newY)
+	return world
 }
+
 func positionofPok(pokedex *Pokedex) {
 
 	x := rand.IntN(sizeX)
@@ -157,12 +192,13 @@ func positionofPok(pokedex *Pokedex) {
 	pokedex.CoordinateY = int(y)
 }
 
+// PokeCat handles player placement, world updates, and encounters with other players or Pokemon
 func PokeCat(Id string, playername string, x int, y int, conn *net.UDPConn, Addr *net.UDPAddr) string {
-	// Check if the coordinates are within the bounds of Pokeworld.
+	// Check if the coordinates are within the bounds of Pokeworld
 	if x >= 0 && x < sizeX && y >= 0 && y < sizeY {
-		// Check if the position is already occupied.
+		// Check if the position is already occupied
 		if Pokeworld[x][y] == "" || Pokeworld[x][y] == "E" {
-			// Place the player at the specified coordinates.
+			// Place the player at the specified coordinates
 			Pokeworld[x][y] = Id
 			if player, exists := players[Id]; exists {
 				// Player exists, update the existing player's fields
@@ -174,22 +210,10 @@ func PokeCat(Id string, playername string, x int, y int, conn *net.UDPConn, Addr
 				for _, pokedex := range pokeDexWorld {
 					CheckForPokemonEncounter(players[Id], pokedex)
 				}
-				// Save the updated list of all players
-				playersList, err := LoadAllPlayerData()
-				if err != nil {
-					fmt.Println("Error loading player data:", err)
-				} else {
-					// Update the player list with the new data
-					for i := range playersList {
-						if playersList[i].ID == Id {
-							playersList[i] = *player
-							break
-						}
-					}
-					// Save updated player data back to JSON file
-					if err := SaveAllPlayerData(playersList); err != nil {
-						fmt.Println("Error saving player data:", err)
-					}
+				// Save the updated player data to the player-specific file
+				if err := SavePlayerData(player); err != nil {
+					fmt.Println("Error saving player data:", err)
+					return "Error"
 				}
 			} else {
 				// Player does not exist, create a new one
@@ -205,17 +229,10 @@ func PokeCat(Id string, playername string, x int, y int, conn *net.UDPConn, Addr
 					CheckForPokemonEncounter(players[Id], pokedex)
 				}
 
-				// Load existing player data and append the new player
-				playersList, err := LoadAllPlayerData()
-				if err != nil {
-					fmt.Println("Error loading player data:", err)
-				} else {
-					// Append the new player to the list
-					playersList = append(playersList, *players[Id])
-					// Save the updated player data back to JSON
-					if err := SaveAllPlayerData(playersList); err != nil {
-						fmt.Println("Error saving player data:", err)
-					}
+				// Save the new player data to their specific file
+				if err := SavePlayerData(players[Id]); err != nil {
+					fmt.Println("Error saving new player data:", err)
+					return "Error"
 				}
 			}
 
@@ -257,59 +274,54 @@ func getRandomPokemon() (*Pokemon, error) {
 	// Return the randomly selected Pokemon
 	return &pokemons[index], nil
 }
-func LoadAllPlayerData() ([]Player, error) {
-	// Read the JSON file containing all players' data
-	data, err := ioutil.ReadFile("playersData.json")
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			// If file does not exist, return empty slice
-			return []Player{}, nil
-		}
-		return nil, err
-	}
 
-	// Unmarshal the JSON data into a slice of Player structs
-	var players []Player
-	err = json.Unmarshal(data, &players)
-	if err != nil {
-		return nil, err
-	}
-
-	return players, nil
-}
-func SaveAllPlayerData(players []Player) error {
-	// Marshal the players data into JSON format
-	updatedData, err := json.MarshalIndent(players, "", "  ")
+// SavePlayerData saves the data of a single player to their specific JSON file
+func SavePlayerData(player *Player) error {
+	// Marshal the player data into JSON format
+	updatedData, err := json.MarshalIndent(player, "", "  ")
 	if err != nil {
 		return err
 	}
 
-	// Write the updated player data back to the file
-	err = os.WriteFile("playersData.json", updatedData, 0666)
+	// Create a unique file for the player using their ID (e.g., playerID.json)
+	filename := fmt.Sprintf("%s.json", player.ID)
+	// Write the player data to their specific file
+	err = os.WriteFile(filename, updatedData, 0666)
 	if err != nil {
 		return err
 	}
 	return nil
 }
-func HandlePlayerLogin(nameOrID string, x int, y int, conn *net.UDPConn, addr *net.UDPAddr) string {
-	// Load all player data from the JSON file
-	players, err := LoadAllPlayerData()
+
+// LoadPlayerData loads the player data from their specific JSON file
+func LoadPlayerData(playerID string) (*Player, error) {
+	// Check if the player’s JSON file exists
+	filename := fmt.Sprintf("%s.json", playerID)
+	data, err := os.ReadFile(filename)
 	if err != nil {
-		fmt.Println("Error loading player data:", err)
-		return "Error"
-	}
-
-	// Check if the player already exists
-	var existingPlayer *Player
-	for i := range players {
-		if players[i].ID == nameOrID {
-			existingPlayer = &players[i]
-			break
+		// If the file doesn't exist, return an error
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, fmt.Errorf("player %s does not exist", playerID)
 		}
+		return nil, err
 	}
 
-	// If player doesn't exist, create a new player
-	if existingPlayer == nil {
+	// Unmarshal the JSON data into a Player struct
+	var player Player
+	err = json.Unmarshal(data, &player)
+	if err != nil {
+		return nil, err
+	}
+
+	return &player, nil
+}
+
+// HandlePlayerLogin checks if the player exists, and either loads or creates their data file
+func HandlePlayerLogin(nameOrID string, x int, y int, conn *net.UDPConn, addr *net.UDPAddr) string {
+	// Try to load player data from their specific JSON file
+	existingPlayer, err := LoadPlayerData(nameOrID)
+	if err != nil {
+		// If the player doesn't exist, create a new player
 		fmt.Println("No existing player data found. Creating a new player...")
 		existingPlayer = &Player{
 			Name:              nameOrID,
@@ -318,22 +330,24 @@ func HandlePlayerLogin(nameOrID string, x int, y int, conn *net.UDPConn, addr *n
 			PlayerCoordinateY: y,
 			Addr:              addr,
 		}
-		// Append the new player to the player list
-		players = append(players, *existingPlayer)
+		// Save the newly created player data to their specific file
+		if err := SavePlayerData(existingPlayer); err != nil {
+			fmt.Println("Error saving new player data:", err)
+			return "Error"
+		}
 	} else {
 		fmt.Println("Player data loaded successfully.")
 		// Update the player's position and network address
 		existingPlayer.PlayerCoordinateX = x
 		existingPlayer.PlayerCoordinateY = y
 		existingPlayer.Addr = addr
+		// Save the updated player data back to their file
+		if err := SavePlayerData(existingPlayer); err != nil {
+			fmt.Println("Error saving updated player data:", err)
+			return "Error"
+		}
 	}
 
-	// Save the updated player data back to the JSON file
-	if err := SaveAllPlayerData(players); err != nil {
-		fmt.Println("Error saving player data:", err)
-		return "Error"
-	}
-
-	// Display the game world after the player logs in
+	// After logging in, place the player on the map
 	return PokeCat(nameOrID, existingPlayer.Name, x, y, conn, addr)
 }

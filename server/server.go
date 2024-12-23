@@ -12,6 +12,7 @@ import (
 func main() {
 	// Seed the random number generator
 	rand.Seed(time.Now().UnixNano()) // Seed for randomness
+
 	// Initialize pokedex with random Pokémon
 	for k := 0; k < 20; k++ {
 		pokemon, err := getRandomPokemon()
@@ -56,7 +57,6 @@ func main() {
 
 		commands := string(buffer[:n])
 		parts := strings.Split(commands, " ")
-		fmt.Println(commands)
 
 		switch strings.ToUpper(parts[0]) {
 		case "CONNECT":
@@ -100,23 +100,14 @@ func main() {
 			return
 
 		case "UP", "DOWN", "LEFT", "RIGHT":
-			var PokeK string
-			if len(parts) < 2 {
-				PokeK = movePlayer(idStr, strings.ToUpper(parts[0]), "1", conn)
-			} else {
-				PokeK = movePlayer(idStr, strings.ToUpper(parts[0]), parts[1], conn)
-			}
+			// Handle player movement
+			PokeK := movePlayer(idStr, strings.ToUpper(parts[0]), conn, addr)
 			fmt.Println(PokeK)
-			for i := range players {
-				_, err := conn.WriteToUDP([]byte(PokeK), players[i].Addr)
-				if err != nil {
-					fmt.Println("Error sending connect message to client:", err)
-				}
+			_, err := conn.WriteToUDP([]byte(PokeK), addr)
+			if err != nil {
+				fmt.Println("Error sending connect message to client:", err)
 			}
-			// _, err := conn.WriteToUDP([]byte(PokeK), addr)
-			// if err != nil {
-			// 	fmt.Println("Error sending connect message to client:", err)
-			// }
+
 		case "INVENTORY":
 			// Send inventory details to the player
 			for _, inv := range players[idStr].Inventory {
