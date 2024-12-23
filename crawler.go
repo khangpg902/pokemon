@@ -58,6 +58,8 @@ type Pokemon struct {
 	EvolutionLevel     int                  `json:"EvolutionLevel"`
 	NextEvolution      string               `json:"NextEvolution"`
 	Moves              []Moves              `json:"Moves"`
+	Exp                int                  `json:"Exp"`
+	Level              int                  `json:"Level"`
 }
 
 const (
@@ -68,7 +70,7 @@ const (
 var pokemons []Pokemon
 
 func main() {
-	crawlPokemonsDriver(5)
+	crawlPokemonsDriver(40)
 }
 func crawlPokemonsDriver(numsOfPokemons int) {
 	//var wg sync.WaitGroup
@@ -89,15 +91,15 @@ func crawlPokemonsDriver(numsOfPokemons int) {
 	page.Goto(baseURL)
 
 	for i := range numsOfPokemons {
-		// simulate clicking the button to open the pokemon details\
+
 		locator := fmt.Sprintf("button.sprite-%d", i+1)
 		button := page.Locator(locator).First()
-		//time.Sleep(500 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 
 		button.Click()
 		time.Sleep(500 * time.Millisecond)
 
-		crawlPokemons(page)
+		pokemons = append(pokemons, crawlPokemons(page))
 
 		page.Goto(baseURL)
 		page.Reload()
@@ -134,7 +136,7 @@ func crawlPokemonsDriver(numsOfPokemons int) {
 	}
 }
 
-func crawlPokemons(page playwright.Page) {
+func crawlPokemons(page playwright.Page) Pokemon {
 	pokemon := Pokemon{}
 
 	pokemon.Name = crawlName(page)
@@ -145,9 +147,10 @@ func crawlPokemons(page playwright.Page) {
 	pokemon.Profile = crawlProfile(page)
 	pokemon.EvolutionLevel, pokemon.NextEvolution = crawlEvo(page, pokemon.Name)
 	pokemon.Moves = createMoves(page, pokemon.Elements)
+	// pokemon.Exp = 0
+	// pokemon.Level = 0
 	fmt.Println(pokemon)
-
-	pokemons = append(pokemons, pokemon)
+	return pokemon
 }
 func crawlName(page playwright.Page) string {
 	name, _ := page.Locator("div.detail-panel > h1.detail-panel-header").TextContent()
@@ -336,5 +339,6 @@ func createMoves(page playwright.Page, elements []string) []Moves {
 		moves = append(moves, Moves{Name: name, Element: element, Acc: accInt})
 		i++
 	}
+
 	return moves
 }
