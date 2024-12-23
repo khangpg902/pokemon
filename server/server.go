@@ -49,20 +49,17 @@ func main() {
 			panic(err)
 		}
 
-		// Extract player ID and command from the received message
-		clientAddr := (strings.Replace(addr.String(), ".", "", -1)) // Remove periods from IP and port
-		clientAddr = (strings.Replace(clientAddr, ":", "", -1))     // Remove colon from IP and port
-		clientAddr = (strings.Replace(clientAddr, " ", "", -1))     // Remove spaces from IP and port
+		// Extract player ID from the received message (based on the client's address)
+		clientAddr := strings.Replace(addr.String(), ".", "", -1) // Remove periods from IP and port
+		clientAddr = strings.Replace(clientAddr, ":", "", -1)     // Remove colon from IP and port
 		idStr := clientAddr
 
 		commands := string(buffer[:n])
 		parts := strings.Split(commands, " ")
 
+		// Handle the different commands
 		switch strings.ToUpper(parts[0]) {
 		case "CONNECT":
-			// Call HandlePlayerLogin for new or existing players
-			fmt.Println("Unique ID Int:", idStr)
-
 			// Get player name from the command
 			playerName := parts[1]
 
@@ -71,27 +68,28 @@ func main() {
 			y := rand.Intn(sizeY)
 
 			// Call HandlePlayerLogin to load or create player data
-			PokeC := HandlePlayerLogin(playerName, x, y, conn, addr)
+			player := HandlePlayerLogin(idStr, playerName, x, y, conn, addr)
 
 			// Send the connection message back to the client
-			connectclient := fmt.Sprintf("Client connected: %s %s ID: %s", playerName, addr, idStr)
-			_, err := conn.WriteToUDP([]byte(connectclient), addr)
+			connectMessage := fmt.Sprintf("Client connected: %s %s ID: %s", playerName, addr, idStr)
+			_, err := conn.WriteToUDP([]byte(connectMessage), addr)
 			if err != nil {
 				fmt.Println("Error sending connect message to client:", err)
 			}
 
-			// Send the updated world map to the player
-			_, err = conn.WriteToUDP([]byte(PokeC), addr)
+			// Send the updated world information (player's coordinates)
+			worldMessage := fmt.Sprintf("World: Player at X: %d, Y: %d", player.PlayerCoordinateX, player.PlayerCoordinateY)
+			_, err = conn.WriteToUDP([]byte(worldMessage), addr)
 			if err != nil {
-				fmt.Println("Error sending connect message to client:", err)
+				fmt.Println("Error sending world map to client:", err)
 			}
 
 		case "INFO":
 			// Send player info
-			Info := fmt.Sprintf("Player Info:%s", idStr)
-			_, err := conn.WriteToUDP([]byte(Info), addr)
+			playerInfo := fmt.Sprintf("Player Info: %s", idStr)
+			_, err := conn.WriteToUDP([]byte(playerInfo), addr)
 			if err != nil {
-				fmt.Println("Error sending connect message to client:", err)
+				fmt.Println("Error sending player info to client:", err)
 			}
 
 		case "DISCONNECT":
@@ -101,22 +99,12 @@ func main() {
 
 		case "UP", "DOWN", "LEFT", "RIGHT":
 			// Handle player movement
-			PokeK := movePlayer(idStr, strings.ToUpper(parts[0]), conn, addr)
-			fmt.Println(PokeK)
-			_, err := conn.WriteToUDP([]byte(PokeK), addr)
+			moveMessage := movePlayer(idStr, strings.ToUpper(parts[0]), conn, addr)
+			_, err := conn.WriteToUDP([]byte(moveMessage), addr)
 			if err != nil {
-				fmt.Println("Error sending connect message to client:", err)
+				fmt.Println("Error sending movement message to client:", err)
 			}
 
-		case "INVENTORY":
-			// Send inventory details to the player
-			for _, inv := range players[idStr].Inventory {
-				inventoryDetails := fmt.Sprintf("Player Inventory: Name: %s, Level: %d", inv.Name, inv.Level)
-				_, err := conn.WriteToUDP([]byte(inventoryDetails), addr)
-				if err != nil {
-					fmt.Println("Error sending connect message to client:", err)
-				}
-			}
 		}
 	}
 }
