@@ -155,7 +155,6 @@ func main() {
 			if err != nil {
 				fmt.Println("Error sending connect message to client:", err)
 			}
-			// Display player info...
 		case "DISCONNECT":
 			fmt.Println("Disconnected from server.")
 			return
@@ -181,16 +180,18 @@ func main() {
 
 func printWorld(x, y int) string {
 	world := "" // Initialize the world as an empty string
+
 	for i := 0; i < sizeX; i++ {
 		for j := 0; j < sizeY; j++ {
 			// If the current position matches the player's coordinates
 			if i == x && j == y {
 				world += "P"
-
 			} else if Pokeworld[i][j] == "E" {
 				world += "E" // Append "E" (Entity) for Pokemon
+			} else if Pokeworld[i][j] != "" {
+				world += "O" // Append "O" for Other Player
 			} else {
-				world += "-" // Append "." for Empty space
+				world += "-"
 			}
 		}
 		world += "\n" // New line after each row

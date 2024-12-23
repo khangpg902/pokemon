@@ -88,14 +88,16 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 				conn.WriteToUDP([]byte(fmt.Sprintf("%s is dead\n", player1Pokemon.Name)), addr1)
 				player1Pokemon = switchPokemon(*player1Pokemons, conn, addr1)
 				if player1Pokemon == nil {
-					fmt.Println("Player 1 has no pokemon left")
-					fmt.Println("Player 1 lost")
+					fmt.Printf("%s has no pokemon left\n", player1.Name)
+					fmt.Printf("%s lost\n", player1.Name)
 					conn.WriteToUDP([]byte("You have no pokemon left. You lost.\n"), addr1)
-					conn.WriteToUDP([]byte("Player 1 has no pokemon left. Player 2 wins.\n"), addr2)
+					conn.WriteToUDP([]byte(fmt.Sprintf("%s has no pokemon left. You wins.\n", player1.Name)), addr2)
+					winner = player2
+					loser = player1
 					break
 				} else {
 					fmt.Println("Player 1 switched to", player1Pokemon.Name)
-					conn.WriteToUDP([]byte(fmt.Sprintf("Player 1 switched to %s\n", player1Pokemon.Name)), addr1)
+					conn.WriteToUDP([]byte(fmt.Sprintf("%s switched to %s\n", player1.Name, player1Pokemon.Name)), addr1)
 				}
 			}
 
@@ -129,18 +131,20 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 				conn.WriteToUDP([]byte(fmt.Sprintf("%s is dead\n", player2Pokemon.Name)), addr2)
 				player2Pokemon = switchPokemon(*player2Pokemons, conn, addr2)
 				if player2Pokemon == nil {
-					fmt.Println("Player 2 has no pokemon left")
-					fmt.Println("Player 2 lost")
+					fmt.Printf("%s has no pokemon left", player2.Name)
+					fmt.Printf("%s lost", player2.Name)
 					conn.WriteToUDP([]byte("You have no pokemon left. You lost.\n"), addr2)
-					conn.WriteToUDP([]byte("Player 2 has no pokemon left. Player 1 wins.\n"), addr1)
+					conn.WriteToUDP([]byte(fmt.Sprintf("%s has no pokemon left. You wins.\n", player2.Name)), addr1)
+					winner = player1
+					loser = player2
 					break
 				} else {
-					fmt.Println("Player 2 switched to", player2Pokemon.Name)
-					conn.WriteToUDP([]byte(fmt.Sprintf("Player 2 switched to %s\n", player2Pokemon.Name)), addr2)
+					fmt.Printf("%s switched to %s", player2.Name, player2Pokemon.Name)
+					conn.WriteToUDP([]byte(fmt.Sprintf("%s switched to %s\n", player2.Name, player2Pokemon.Name)), addr2)
 				}
 			}
 
-			fmt.Printf("Player 2 turn. Your current pokemon is %s. Choose your action:\n", player2Pokemon.Name)
+			fmt.Printf("%s turn. %s current pokemon is %s. Choose your action:\n", player2.Name, player2.Name, player2Pokemon.Name)
 			conn.WriteToUDP([]byte(fmt.Sprintf("Your turn. Your current pokemon is %s. Choose your action:\n", player2Pokemon.Name)), addr2)
 			command := readCommands(conn, addr2)
 			switch command {
@@ -149,7 +153,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 			case "switch":
 				displaySelectedPokemons(*player2Pokemons, conn, addr2)
 				player2Pokemon = switchToChosenPokemon(*player2Pokemons, conn, addr2)
-				fmt.Println("Player 2 switched to", player2Pokemon.Name)
+				fmt.Printf("%s switched to %s\n", player2.Name, player2Pokemon.Name)
 				conn.WriteToUDP([]byte(fmt.Sprintf("Switched to %s\n", player2Pokemon.Name)), addr2)
 			case "surrender":
 				surrender(player2, player1, conn, player2.Addr, player1.Addr)
