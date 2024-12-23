@@ -13,12 +13,12 @@ import (
 )
 
 type Stats struct {
-	HP         int `json:"HP"`
-	Attack     int `json:"Attack"`
-	Defense    int `json:"Defense"`
-	Speed      int `json:"Speed"`
-	Sp_Attack  int `json:"Sp_Attack"`
-	Sp_Defense int `json:"Sp_Defense"`
+	HP         float32 `json:"HP"`
+	Attack     float32 `json:"Attack"`
+	Defense    float32 `json:"Defense"`
+	Speed      int     `json:"Speed"`
+	Sp_Attack  float32 `json:"Sp_Attack"`
+	Sp_Defense float32 `json:"Sp_Defense"`
 }
 
 type GenderRatio struct {
@@ -178,22 +178,28 @@ func crawlStats(page playwright.Page) Stats {
 		switch title {
 		case "HP":
 			hp, _ := entry.Locator("span.stat-bar > div.stat-bar-fg").TextContent()
-			stats.HP, _ = strconv.Atoi(hp)
+			hp_int, _ := strconv.Atoi(hp)
+			stats.HP = float32(hp_int)
 		case "Attack":
 			attack, _ := entry.Locator("span.stat-bar > div.stat-bar-fg").TextContent()
-			stats.Attack, _ = strconv.Atoi(attack)
+			attack_int, _ := strconv.Atoi(attack)
+			stats.Attack = float32(attack_int)
 		case "Defense":
 			defense, _ := entry.Locator("span.stat-bar > div.stat-bar-fg").TextContent()
-			stats.Defense, _ = strconv.Atoi(defense)
+			defensep_int, _ := strconv.Atoi(defense)
+			stats.Defense = float32(defensep_int)
 		case "Speed":
 			speed, _ := entry.Locator("span.stat-bar > div.stat-bar-fg").TextContent()
 			stats.Speed, _ = strconv.Atoi(speed)
+
 		case "Sp Atk":
 			sp_Attack, _ := entry.Locator("span.stat-bar > div.stat-bar-fg").TextContent()
-			stats.Sp_Attack, _ = strconv.Atoi(sp_Attack)
+			sp_Attack_int, _ := strconv.Atoi(sp_Attack)
+			stats.Sp_Attack = float32(sp_Attack_int)
 		case "Sp Def":
 			sp_Defense, _ := entry.Locator("span.stat-bar > div.stat-bar-fg").TextContent()
-			stats.Sp_Defense, _ = strconv.Atoi(sp_Defense)
+			sp_Defense_int, _ := strconv.Atoi(sp_Defense)
+			stats.Sp_Defense = float32(sp_Defense_int)
 		default:
 			fmt.Println("Unknown title: ", title)
 		}
