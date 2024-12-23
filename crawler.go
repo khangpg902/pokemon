@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand/v2"
 	"os"
 	"strconv"
 	"strings"
@@ -62,16 +63,24 @@ type Pokemon struct {
 	Level              int                  `json:"Level"`
 }
 
+// const (
+// 	numberOfPokemons = 649
+// 	baseURL          = "https://pokedex.org/#/"
+// )
+
+// var pokemons []Pokemon
+
 const (
-	//numberOfPokemons = 649
-	baseURL = "https://pokedex.org/#/"
+	numberOfPokemons = 649
+	baseURL          = "https://pokedex.org/#/"
 )
 
-var pokemons []Pokemon
+var pokemons = []Pokemon{}
 
 func main() {
-	crawlPokemonsDriver(40)
+	crawlPokemonsDriver(numberOfPokemons)
 }
+
 func crawlPokemonsDriver(numsOfPokemons int) {
 	//var wg sync.WaitGroup
 	pw, err := playwright.Run()
@@ -89,21 +98,41 @@ func crawlPokemonsDriver(numsOfPokemons int) {
 	}
 
 	page.Goto(baseURL)
-
 	for i := range numsOfPokemons {
+		// simulate clicking the button to open the pokemon details
+		page.Reload()
+		page.WaitForURL(baseURL)
 
 		locator := fmt.Sprintf("button.sprite-%d", i+1)
 		button := page.Locator(locator).First()
 		time.Sleep(500 * time.Millisecond)
-
 		button.Click()
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 
-		pokemons = append(pokemons, crawlPokemons(page))
+		url := fmt.Sprintf("https://pokedex.org/#/pokemon/%d", i+1)
+		page.WaitForURL(url)
+
+		fmt.Print("Pokemon ", i+1, " ")
+		//newPokemon.Moves = createMoves(page, pokemon.Elements)
+		newPokemon := crawlPokemons(page)
+		pokemons = append(pokemons, newPokemon)
 
 		page.Goto(baseURL)
-		page.Reload()
 	}
+	// for i := range numsOfPokemons {
+
+	// 	locator := fmt.Sprintf("button.sprite-%d", i+1)
+	// 	button := page.Locator(locator).First()
+	// 	time.Sleep(200 * time.Millisecond)
+
+	// 	button.Click()
+	// 	time.Sleep(500 * time.Millisecond)
+
+	// 	pokemons = append(pokemons, crawlPokemons(page))
+
+	// 	page.Goto(baseURL)
+	// 	page.Reload()
+	// }
 	// wg.Add(1)
 
 	// go func(page playwright.Page) {
@@ -308,16 +337,7 @@ func crawlEvo(page playwright.Page, name string) (int, string) {
 }
 func createMoves(page playwright.Page, elements []string) []Moves {
 	moves := []Moves{}
-	entries, _ := page.Locator("div.monster-moves > div.moves-row").All()
-	i := 0
-	for _, entry := range entries {
-		if i == 2 {
-			break
-		}
-		// simulate clicking the expand button in the move rows
-		expandButton := page.Locator("div.moves-inner-row > button.dropdown-button").First()
-		expandButton.Click()
-
+	for i := 0; i < 2; i++ {
 		var name string
 		element := make([]string, 2)
 		if i == 0 {
@@ -328,16 +348,11 @@ func createMoves(page playwright.Page, elements []string) []Moves {
 			name = "Special Attack"
 			element = elements
 		}
-
-		acc, _ := entry.Locator("div.moves-row-detail > div.moves-row-stats > span:nth-child(2)").TextContent()
-		accs := strings.Split(acc, ": ")
-		accValue := strings.Split(accs[1], "%")
-		accInt, _ := strconv.Atoi(accValue[0])
-		if accInt == 0 {
-			accInt = 80
+		accInt := rand.IntN(9999) % 100
+		if accInt < 50 {
+			accInt = 50
 		}
 		moves = append(moves, Moves{Name: name, Element: element, Acc: accInt})
-		i++
 	}
 
 	return moves
