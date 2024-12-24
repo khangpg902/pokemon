@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"math/rand/v2"
 	"net"
 	"os"
+	"strconv"
 	"sync"
 )
 
@@ -99,8 +99,10 @@ func printWorld(x, y int) string {
 
 			} else if Pokeworld[i][j] == "E" {
 				world += "E" // Append "E" (Entity) for Pokemon
+			} else if Pokeworld[i][j] != "" {
+				world += "O" // Append "O" for Other player space
 			} else {
-				world += "-" // Append "." for Empty space
+				world += "." // Append "." for Empty space
 			}
 		}
 		world += "\n" // New line after each row
@@ -118,7 +120,7 @@ func CheckForPokemonEncounter(player *Player, pokemon *Pokedex) {
 	}
 }
 
-func movePlayer(id string, direction string, conn *net.UDPConn, addr *net.UDPAddr) string {
+func movePlayer(id string, direction string, step string, conn *net.UDPConn, addr *net.UDPAddr) string {
 	// Get the player based on the ID
 	player, exists := players[id]
 	if !exists {
@@ -127,16 +129,17 @@ func movePlayer(id string, direction string, conn *net.UDPConn, addr *net.UDPAdd
 
 	// Determine the movement step based on direction
 	var deltaX, deltaY int
+	stepSize, _ := strconv.Atoi(step)
 
 	switch direction {
 	case "UP":
-		deltaX = -1
+		deltaX = -1 * stepSize
 	case "DOWN":
-		deltaX = 1
+		deltaX = 1 * stepSize
 	case "LEFT":
-		deltaY = -1
+		deltaY = -1 * stepSize
 	case "RIGHT":
-		deltaY = 1
+		deltaY = 1 * stepSize
 	default:
 		return fmt.Sprintf("Invalid direction: %s", direction)
 	}
@@ -158,29 +161,11 @@ func movePlayer(id string, direction string, conn *net.UDPConn, addr *net.UDPAdd
 		newY = sizeY - 1
 	}
 
-	// Update the player's coordinates
-	player.PlayerCoordinateX = newX
-	player.PlayerCoordinateY = newY
-
 	// Clear the old position
 	Pokeworld[player.PlayerCoordinateX][player.PlayerCoordinateY] = ""
 
-	// Set the new position on the map
-	Pokeworld[newX][newY] = id
-
-	// Check for any Pokemon encounter at the new position
-	for _, pokedex := range pokeDexWorld {
-		CheckForPokemonEncounter(player, pokedex)
-	}
-
-	// Save the updated player data
-	if err := SavePlayerData(player); err != nil {
-		fmt.Println("Error saving player data:", err)
-	}
-
-	// Return the updated world map to the player
-	world := printWorld(newX, newY)
-	return world
+	pokeCat := PokeCat(id, player.Name, newX, newY, conn, addr)
+	return pokeCat
 }
 
 func positionofPok(pokedex *Pokedex) {
@@ -324,7 +309,7 @@ func HandlePlayerLogin(idStr, playerName string, x, y int, conn *net.UDPConn, ad
 	// Check if player file exists and load data if present
 	if _, err := os.Stat(playerFileName); err == nil {
 		// Load existing player data from the JSON file
-		data, err := ioutil.ReadFile(playerFileName)
+		data, err := os.ReadFile(playerFileName)
 		if err != nil {
 			fmt.Println("Error reading player file:", err)
 			return nil
@@ -342,7 +327,7 @@ func HandlePlayerLogin(idStr, playerName string, x, y int, conn *net.UDPConn, ad
 			fmt.Println("Error marshalling player data:", err)
 			return nil
 		}
-		err = ioutil.WriteFile(playerFileName, data, 0644)
+		err = os.WriteFile(playerFileName, data, 0644)
 		if err != nil {
 			fmt.Println("Error saving player file:", err)
 			return nil
@@ -352,6 +337,5 @@ func HandlePlayerLogin(idStr, playerName string, x, y int, conn *net.UDPConn, ad
 
 	// Save player data to global players map
 	players[idStr] = player
-
 	return player
 }

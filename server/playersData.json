@@ -1,0 +1,500 @@
+[
+  {
+    "Name": "khang",
+    "ID": "khang",
+    "PlayerCoordinateX": 1,
+    "PlayerCoordinateY": 9,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 54722,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "khang",
+    "ID": "khang",
+    "PlayerCoordinateX": 1,
+    "PlayerCoordinateY": 2,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 62364,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "h",
+    "ID": "h",
+    "PlayerCoordinateX": 5,
+    "PlayerCoordinateY": 2,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 49667,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "h",
+    "ID": "h",
+    "PlayerCoordinateX": 5,
+    "PlayerCoordinateY": 2,
+    "Inventory": [
+      {
+        "Id": 15,
+        "Name": "Beedrill",
+        "Elements": [
+          "bug",
+          "poison"
+        ],
+        "EV": 0,
+        "Stats": {
+          "HP": 65,
+          "Attack": 90,
+          "Defense": 40,
+          "Speed": 75,
+          "Sp_Attack": 45,
+          "Sp_Defense": 80
+        },
+        "Profile": {
+          "Height": 1,
+          "Weight": 29.5,
+          "CatchRate": 0,
+          "GenderRatio": {
+            "MaleRatio": 50,
+            "FemaleRatio": 50
+          },
+          "EggGroup": "Bug",
+          "HatchSteps": 3825,
+          "Abilities": "Swarm, Sniper"
+        },
+        "DamegeWhenAttacked": [
+          {
+            "Element": "psychic",
+            "Coefficient": 2
+          },
+          {
+            "Element": "poison",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "flying",
+            "Coefficient": 2
+          },
+          {
+            "Element": "bug",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "rock",
+            "Coefficient": 2
+          },
+          {
+            "Element": "fairy",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "fire",
+            "Coefficient": 2
+          },
+          {
+            "Element": "fighting",
+            "Coefficient": 0.25
+          },
+          {
+            "Element": "grass",
+            "Coefficient": 0.25
+          }
+        ],
+        "EvolutionLevel": 0,
+        "NextEvolution": "",
+        "Moves": [
+          {
+            "Name": "Normal Attack",
+            "Element": [
+              "None"
+            ],
+            "Acc": 87
+          },
+          {
+            "Name": "Special Attack",
+            "Element": [
+              "bug",
+              "poison"
+            ],
+            "Acc": 99
+          }
+        ],
+        "Exp": 0,
+        "Level": 0
+      }
+    ],
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 49667,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "khang",
+    "ID": "khang",
+    "PlayerCoordinateX": 8,
+    "PlayerCoordinateY": 8,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 65363,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "khang",
+    "ID": "khang",
+    "PlayerCoordinateX": 3,
+    "PlayerCoordinateY": 6,
+    "Inventory": [
+      {
+        "Id": 559,
+        "Name": "Scraggy",
+        "Elements": [
+          "dark",
+          "fighting"
+        ],
+        "EV": 0,
+        "Stats": {
+          "HP": 50,
+          "Attack": 75,
+          "Defense": 70,
+          "Speed": 48,
+          "Sp_Attack": 35,
+          "Sp_Defense": 70
+        },
+        "Profile": {
+          "Height": 0.6,
+          "Weight": 11.8,
+          "CatchRate": 0,
+          "GenderRatio": {
+            "MaleRatio": 50,
+            "FemaleRatio": 50
+          },
+          "EggGroup": "Field, Dragon",
+          "HatchSteps": 3825,
+          "Abilities": "Intimidate, Shed-skin, Moxie"
+        },
+        "DamegeWhenAttacked": [
+          {
+            "Element": "fairy",
+            "Coefficient": 4
+          },
+          {
+            "Element": "rock",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "flying",
+            "Coefficient": 2
+          },
+          {
+            "Element": "grass",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "fighting",
+            "Coefficient": 2
+          },
+          {
+            "Element": "ghost",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "dark",
+            "Coefficient": 0.25
+          },
+          {
+            "Element": "psychic",
+            "Coefficient": 0
+          }
+        ],
+        "EvolutionLevel": 39,
+        "NextEvolution": "Scrafty",
+        "Moves": [
+          {
+            "Name": "Normal Attack",
+            "Element": [
+              "None"
+            ],
+            "Acc": 50
+          },
+          {
+            "Name": "Special Attack",
+            "Element": [
+              "dark",
+              "fighting"
+            ],
+            "Acc": 50
+          }
+        ],
+        "Exp": 0,
+        "Level": 0
+      }
+    ],
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 53047,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "khang",
+    "ID": "khang",
+    "PlayerCoordinateX": 9,
+    "PlayerCoordinateY": 2,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 59795,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "khang",
+    "ID": "khang",
+    "PlayerCoordinateX": 8,
+    "PlayerCoordinateY": 7,
+    "Inventory": [
+      {
+        "Id": 417,
+        "Name": "Pachirisu",
+        "Elements": [
+          "electric"
+        ],
+        "EV": 0,
+        "Stats": {
+          "HP": 60,
+          "Attack": 45,
+          "Defense": 70,
+          "Speed": 95,
+          "Sp_Attack": 45,
+          "Sp_Defense": 90
+        },
+        "Profile": {
+          "Height": 0.4,
+          "Weight": 3.9,
+          "CatchRate": 0,
+          "GenderRatio": {
+            "MaleRatio": 50,
+            "FemaleRatio": 50
+          },
+          "EggGroup": "Field, Fairy",
+          "HatchSteps": 2550,
+          "Abilities": "Volt-absorb, Run-away, Pickup"
+        },
+        "DamegeWhenAttacked": [
+          {
+            "Element": "ground",
+            "Coefficient": 2
+          },
+          {
+            "Element": "flying",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "steel",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "electric",
+            "Coefficient": 0.5
+          }
+        ],
+        "EvolutionLevel": 0,
+        "NextEvolution": "",
+        "Moves": [
+          {
+            "Name": "Normal Attack",
+            "Element": [
+              "None"
+            ],
+            "Acc": 76
+          },
+          {
+            "Name": "Special Attack",
+            "Element": [
+              "electric"
+            ],
+            "Acc": 55
+          }
+        ],
+        "Exp": 0,
+        "Level": 0
+      }
+    ],
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 63595,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "khang",
+    "ID": "khang",
+    "PlayerCoordinateX": 1,
+    "PlayerCoordinateY": 3,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 63512,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "khang",
+    "ID": "khang",
+    "PlayerCoordinateX": 1,
+    "PlayerCoordinateY": 9,
+    "Inventory": [
+      {
+        "Id": 204,
+        "Name": "Pineco",
+        "Elements": [
+          "bug"
+        ],
+        "EV": 0,
+        "Stats": {
+          "HP": 50,
+          "Attack": 65,
+          "Defense": 90,
+          "Speed": 15,
+          "Sp_Attack": 35,
+          "Sp_Defense": 35
+        },
+        "Profile": {
+          "Height": 0.6,
+          "Weight": 7.2,
+          "CatchRate": 0,
+          "GenderRatio": {
+            "MaleRatio": 50,
+            "FemaleRatio": 50
+          },
+          "EggGroup": "Bug",
+          "HatchSteps": 5100,
+          "Abilities": "Sturdy, Overcoat"
+        },
+        "DamegeWhenAttacked": [
+          {
+            "Element": "flying",
+            "Coefficient": 2
+          },
+          {
+            "Element": "fighting",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "rock",
+            "Coefficient": 2
+          },
+          {
+            "Element": "ground",
+            "Coefficient": 0.5
+          },
+          {
+            "Element": "fire",
+            "Coefficient": 2
+          },
+          {
+            "Element": "grass",
+            "Coefficient": 0.5
+          }
+        ],
+        "EvolutionLevel": 31,
+        "NextEvolution": "Forretress",
+        "Moves": [
+          {
+            "Name": "Normal Attack",
+            "Element": [
+              "None"
+            ],
+            "Acc": 50
+          },
+          {
+            "Name": "Special Attack",
+            "Element": [
+              "bug"
+            ],
+            "Acc": 50
+          }
+        ],
+        "Exp": 0,
+        "Level": 0
+      }
+    ],
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 54722,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "",
+    "ID": "",
+    "PlayerCoordinateX": 4,
+    "PlayerCoordinateY": 0,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 52706,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "",
+    "ID": "",
+    "PlayerCoordinateX": 4,
+    "PlayerCoordinateY": 0,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 52706,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "huy",
+    "ID": "huy",
+    "PlayerCoordinateX": 2,
+    "PlayerCoordinateY": 1,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 54005,
+      "Zone": ""
+    }
+  },
+  {
+    "Name": "huy",
+    "ID": "huy",
+    "PlayerCoordinateX": 2,
+    "PlayerCoordinateY": 1,
+    "Inventory": null,
+    "IsTurn": false,
+    "Addr": {
+      "IP": "127.0.0.1",
+      "Port": 54005,
+      "Zone": ""
+    }
+  }
+]

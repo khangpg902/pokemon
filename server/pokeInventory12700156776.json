@@ -1,0 +1,622 @@
+{
+  "Name": "khang",
+  "ID": "12700156776",
+  "PlayerCoordinateX": 4,
+  "PlayerCoordinateY": 8,
+  "Inventory": [
+    {
+      "Id": 30,
+      "Name": "Nidorina",
+      "Elements": [
+        "poison"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 70,
+        "Attack": 62,
+        "Defense": 67,
+        "Speed": 56,
+        "Sp_Attack": 55,
+        "Sp_Defense": 55
+      },
+      "Profile": {
+        "Height": 0.8,
+        "Weight": 20,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 0,
+          "FemaleRatio": 100
+        },
+        "EggGroup": "No Eggs",
+        "HatchSteps": 5100,
+        "Abilities": "Poison-point, Hustle, Rivalry"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "ground",
+          "Coefficient": 2
+        },
+        {
+          "Element": "fighting",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "psychic",
+          "Coefficient": 2
+        },
+        {
+          "Element": "poison",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "bug",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fairy",
+          "Coefficient": 0.5
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "Nidoqueen",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "poison"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 22,
+      "Name": "Fearow",
+      "Elements": [
+        "flying",
+        "normal"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 65,
+        "Attack": 90,
+        "Defense": 65,
+        "Speed": 100,
+        "Sp_Attack": 61,
+        "Sp_Defense": 61
+      },
+      "Profile": {
+        "Height": 1.2,
+        "Weight": 38,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 50,
+          "FemaleRatio": 50
+        },
+        "EggGroup": "Flying",
+        "HatchSteps": 3825,
+        "Abilities": "Keen-eye, Sniper"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "rock",
+          "Coefficient": 2
+        },
+        {
+          "Element": "bug",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "electric",
+          "Coefficient": 2
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "ice",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ghost",
+          "Coefficient": 0
+        },
+        {
+          "Element": "ground",
+          "Coefficient": 0
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "flying",
+            "normal"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 37,
+      "Name": "Vulpix",
+      "Elements": [
+        "fire"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 38,
+        "Attack": 41,
+        "Defense": 40,
+        "Speed": 65,
+        "Sp_Attack": 50,
+        "Sp_Defense": 65
+      },
+      "Profile": {
+        "Height": 0.6,
+        "Weight": 9.9,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 25,
+          "FemaleRatio": 75
+        },
+        "EggGroup": "Field",
+        "HatchSteps": 5100,
+        "Abilities": "Flash-fire, Drought"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "ground",
+          "Coefficient": 2
+        },
+        {
+          "Element": "steel",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "rock",
+          "Coefficient": 2
+        },
+        {
+          "Element": "fire",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "water",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ice",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fairy",
+          "Coefficient": 0.5
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "Ninetales",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "fire"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 20,
+      "Name": "Raticate",
+      "Elements": [
+        "normal"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 55,
+        "Attack": 81,
+        "Defense": 60,
+        "Speed": 97,
+        "Sp_Attack": 50,
+        "Sp_Defense": 70
+      },
+      "Profile": {
+        "Height": 0.7,
+        "Weight": 18.5,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 50,
+          "FemaleRatio": 50
+        },
+        "EggGroup": "Field",
+        "HatchSteps": 3825,
+        "Abilities": "Run-away, Hustle, Guts"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "fighting",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ghost",
+          "Coefficient": 0
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 80
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "normal"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 22,
+      "Name": "Fearow",
+      "Elements": [
+        "flying",
+        "normal"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 65,
+        "Attack": 90,
+        "Defense": 65,
+        "Speed": 100,
+        "Sp_Attack": 61,
+        "Sp_Defense": 61
+      },
+      "Profile": {
+        "Height": 1.2,
+        "Weight": 38,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 50,
+          "FemaleRatio": 50
+        },
+        "EggGroup": "Flying",
+        "HatchSteps": 3825,
+        "Abilities": "Keen-eye, Sniper"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "rock",
+          "Coefficient": 2
+        },
+        {
+          "Element": "bug",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "electric",
+          "Coefficient": 2
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "ice",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ghost",
+          "Coefficient": 0
+        },
+        {
+          "Element": "ground",
+          "Coefficient": 0
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "flying",
+            "normal"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 32,
+      "Name": "Nidoran ♂",
+      "Elements": [
+        "poison"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 46,
+        "Attack": 57,
+        "Defense": 40,
+        "Speed": 50,
+        "Sp_Attack": 40,
+        "Sp_Defense": 40
+      },
+      "Profile": {
+        "Height": 0.5,
+        "Weight": 9,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 100,
+          "FemaleRatio": 0
+        },
+        "EggGroup": "Monster, Field",
+        "HatchSteps": 5100,
+        "Abilities": "Poison-point, Hustle, Rivalry"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "ground",
+          "Coefficient": 2
+        },
+        {
+          "Element": "fighting",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "psychic",
+          "Coefficient": 2
+        },
+        {
+          "Element": "poison",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "bug",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fairy",
+          "Coefficient": 0.5
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "poison"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 32,
+      "Name": "Nidoran ♂",
+      "Elements": [
+        "poison"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 46,
+        "Attack": 57,
+        "Defense": 40,
+        "Speed": 50,
+        "Sp_Attack": 40,
+        "Sp_Defense": 40
+      },
+      "Profile": {
+        "Height": 0.5,
+        "Weight": 9,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 100,
+          "FemaleRatio": 0
+        },
+        "EggGroup": "Monster, Field",
+        "HatchSteps": 5100,
+        "Abilities": "Poison-point, Hustle, Rivalry"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "ground",
+          "Coefficient": 2
+        },
+        {
+          "Element": "fighting",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "psychic",
+          "Coefficient": 2
+        },
+        {
+          "Element": "poison",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "bug",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fairy",
+          "Coefficient": 0.5
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "poison"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 27,
+      "Name": "Sandshrew",
+      "Elements": [
+        "ground"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 50,
+        "Attack": 75,
+        "Defense": 85,
+        "Speed": 40,
+        "Sp_Attack": 20,
+        "Sp_Defense": 30
+      },
+      "Profile": {
+        "Height": 0.6,
+        "Weight": 12,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 50,
+          "FemaleRatio": 50
+        },
+        "EggGroup": "Field",
+        "HatchSteps": 5100,
+        "Abilities": "Sand-veil, Sand-rush"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "water",
+          "Coefficient": 2
+        },
+        {
+          "Element": "poison",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ground",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "ice",
+          "Coefficient": 2
+        },
+        {
+          "Element": "rock",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "electric",
+          "Coefficient": 0
+        }
+      ],
+      "EvolutionLevel": 22,
+      "NextEvolution": "Sandslash",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "ground"
+          ],
+          "Acc": 80
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    }
+  ],
+  "IsTurn": false,
+  "Addr": {
+    "IP": "127.0.0.1",
+    "Port": 56776,
+    "Zone": ""
+  }
+}

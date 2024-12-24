@@ -1,0 +1,494 @@
+{
+  "Name": "h",
+  "ID": "12700156635",
+  "PlayerCoordinateX": 4,
+  "PlayerCoordinateY": 9,
+  "Inventory": [
+    {
+      "Id": 32,
+      "Name": "Nidoran ♂",
+      "Elements": [
+        "poison"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 46,
+        "Attack": 57,
+        "Defense": 40,
+        "Speed": 50,
+        "Sp_Attack": 40,
+        "Sp_Defense": 40
+      },
+      "Profile": {
+        "Height": 0.5,
+        "Weight": 9,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 100,
+          "FemaleRatio": 0
+        },
+        "EggGroup": "Monster, Field",
+        "HatchSteps": 5100,
+        "Abilities": "Poison-point, Hustle, Rivalry"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "ground",
+          "Coefficient": 2
+        },
+        {
+          "Element": "fighting",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "psychic",
+          "Coefficient": 2
+        },
+        {
+          "Element": "poison",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "bug",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fairy",
+          "Coefficient": 0.5
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "poison"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 5,
+      "Name": "Charmeleon",
+      "Elements": [
+        "fire"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 58,
+        "Attack": 64,
+        "Defense": 58,
+        "Speed": 80,
+        "Sp_Attack": 80,
+        "Sp_Defense": 65
+      },
+      "Profile": {
+        "Height": 1.1,
+        "Weight": 19,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 87.5,
+          "FemaleRatio": 12.5
+        },
+        "EggGroup": "Monster, Dragon",
+        "HatchSteps": 5100,
+        "Abilities": "Blaze, Solar-power"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "ground",
+          "Coefficient": 2
+        },
+        {
+          "Element": "steel",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "rock",
+          "Coefficient": 2
+        },
+        {
+          "Element": "fire",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "water",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ice",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fairy",
+          "Coefficient": 0.5
+        }
+      ],
+      "EvolutionLevel": 36,
+      "NextEvolution": "Charizard",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "fire"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 16,
+      "Name": "Pidgey",
+      "Elements": [
+        "flying",
+        "normal"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 40,
+        "Attack": 45,
+        "Defense": 40,
+        "Speed": 56,
+        "Sp_Attack": 35,
+        "Sp_Defense": 35
+      },
+      "Profile": {
+        "Height": 0.3,
+        "Weight": 1.8,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 50,
+          "FemaleRatio": 50
+        },
+        "EggGroup": "Flying",
+        "HatchSteps": 3825,
+        "Abilities": "Keen-eye, Tangled-feet, Big-pecks"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "rock",
+          "Coefficient": 2
+        },
+        {
+          "Element": "bug",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "electric",
+          "Coefficient": 2
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "ice",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ghost",
+          "Coefficient": 0
+        },
+        {
+          "Element": "ground",
+          "Coefficient": 0
+        }
+      ],
+      "EvolutionLevel": 18,
+      "NextEvolution": "Pidgeotto",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "flying",
+            "normal"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 27,
+      "Name": "Sandshrew",
+      "Elements": [
+        "ground"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 50,
+        "Attack": 75,
+        "Defense": 85,
+        "Speed": 40,
+        "Sp_Attack": 20,
+        "Sp_Defense": 30
+      },
+      "Profile": {
+        "Height": 0.6,
+        "Weight": 12,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 50,
+          "FemaleRatio": 50
+        },
+        "EggGroup": "Field",
+        "HatchSteps": 5100,
+        "Abilities": "Sand-veil, Sand-rush"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "water",
+          "Coefficient": 2
+        },
+        {
+          "Element": "poison",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ground",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "ice",
+          "Coefficient": 2
+        },
+        {
+          "Element": "rock",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "electric",
+          "Coefficient": 0
+        }
+      ],
+      "EvolutionLevel": 22,
+      "NextEvolution": "Sandslash",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "ground"
+          ],
+          "Acc": 80
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 6,
+      "Name": "Charizard",
+      "Elements": [
+        "fire",
+        "flying"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 78,
+        "Attack": 84,
+        "Defense": 78,
+        "Speed": 100,
+        "Sp_Attack": 109,
+        "Sp_Defense": 85
+      },
+      "Profile": {
+        "Height": 1.7,
+        "Weight": 90.5,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 87.5,
+          "FemaleRatio": 12.5
+        },
+        "EggGroup": "Monster, Dragon",
+        "HatchSteps": 5100,
+        "Abilities": "Blaze, Solar-power"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "rock",
+          "Coefficient": 4
+        },
+        {
+          "Element": "fighting",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "ground",
+          "Coefficient": 2
+        },
+        {
+          "Element": "bug",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "electric",
+          "Coefficient": 2
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "water",
+          "Coefficient": 2
+        },
+        {
+          "Element": "steel",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fire",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fairy",
+          "Coefficient": 0.5
+        }
+      ],
+      "EvolutionLevel": 0,
+      "NextEvolution": "",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 100
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "fire",
+            "flying"
+          ],
+          "Acc": 95
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    },
+    {
+      "Id": 11,
+      "Name": "Metapod",
+      "Elements": [
+        "bug"
+      ],
+      "EV": 0,
+      "Stats": {
+        "HP": 50,
+        "Attack": 20,
+        "Defense": 55,
+        "Speed": 30,
+        "Sp_Attack": 25,
+        "Sp_Defense": 25
+      },
+      "Profile": {
+        "Height": 0.7,
+        "Weight": 9.9,
+        "CatchRate": 0,
+        "GenderRatio": {
+          "MaleRatio": 50,
+          "FemaleRatio": 50
+        },
+        "EggGroup": "Bug",
+        "HatchSteps": 3825,
+        "Abilities": "Shed-skin"
+      },
+      "DamegeWhenAttacked": [
+        {
+          "Element": "flying",
+          "Coefficient": 2
+        },
+        {
+          "Element": "fighting",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "rock",
+          "Coefficient": 2
+        },
+        {
+          "Element": "ground",
+          "Coefficient": 0.5
+        },
+        {
+          "Element": "fire",
+          "Coefficient": 2
+        },
+        {
+          "Element": "grass",
+          "Coefficient": 0.5
+        }
+      ],
+      "EvolutionLevel": 10,
+      "NextEvolution": "Butterfree",
+      "Moves": [
+        {
+          "Name": "Normal Attack",
+          "Element": [
+            "None"
+          ],
+          "Acc": 80
+        },
+        {
+          "Name": "Special Attack",
+          "Element": [
+            "bug"
+          ],
+          "Acc": 100
+        }
+      ],
+      "Exp": 0,
+      "Level": 0
+    }
+  ],
+  "IsTurn": true,
+  "Addr": {
+    "IP": "127.0.0.1",
+    "Port": 56635,
+    "Zone": ""
+  }
+}

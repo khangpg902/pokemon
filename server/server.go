@@ -83,7 +83,6 @@ func main() {
 			if err != nil {
 				fmt.Println("Error sending world map to client:", err)
 			}
-
 		case "INFO":
 			// Send player info
 			playerInfo := fmt.Sprintf("Player Info: %s", idStr)
@@ -99,10 +98,25 @@ func main() {
 
 		case "UP", "DOWN", "LEFT", "RIGHT":
 			// Handle player movement
-			moveMessage := movePlayer(idStr, strings.ToUpper(parts[0]), conn, addr)
+			var moveMessage string
+			if len(parts) < 2 {
+				moveMessage = movePlayer(idStr, strings.ToUpper(parts[0]), "1", conn, addr)
+			} else {
+				moveMessage = movePlayer(idStr, strings.ToUpper(parts[0]), parts[1], conn, addr)
+			}
+
 			_, err := conn.WriteToUDP([]byte(moveMessage), addr)
 			if err != nil {
 				fmt.Println("Error sending movement message to client:", err)
+			}
+		case "INVENTORY":
+			// Send inventory details to the player
+			for _, inv := range players[idStr].Inventory {
+				inventoryDetails := fmt.Sprintf("Player Inventory: Name: %s, Level: %d", inv.Name, inv.Level)
+				_, err := conn.WriteToUDP([]byte(inventoryDetails), addr)
+				if err != nil {
+					fmt.Println("Error sending connect message to client:", err)
+				}
 			}
 
 		}

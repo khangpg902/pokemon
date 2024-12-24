@@ -63,6 +63,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 	conn.WriteToUDP([]byte("Battle start!\n"), addr2)
 	var winner, loser *Player
 	if isContain(*player1Pokemons, *firstAttacker) {
+		firstAttacker = getFirstAttacker(*player1Pokemons)
 		firstDefender = getFirstDefender(*player2Pokemons)
 		fmt.Println("Player 1 goes first")
 		conn.WriteToUDP([]byte("Player 1 goes first\n"), addr1)
@@ -70,6 +71,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 		player1.IsTurn = true
 		player2.IsTurn = false
 	} else {
+		firstAttacker = getFirstAttacker(*player2Pokemons)
 		firstDefender = getFirstDefender(*player1Pokemons)
 		fmt.Println("Player 2 goes first")
 		conn.WriteToUDP([]byte("Player 2 goes first\n"), addr1)
@@ -77,11 +79,19 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 		player1.IsTurn = false
 		player2.IsTurn = true
 	}
-
+	var player1Pokemon *Pokemon
+	var player2Pokemon *Pokemon
 	// The battle loop
-	var player1Pokemon = firstAttacker
-	var player2Pokemon = firstDefender
-	for {
+	if player1.IsTurn {
+		player1Pokemon = firstAttacker
+		player2Pokemon = firstDefender
+	} else {
+		player1Pokemon = firstDefender
+		player2Pokemon = firstAttacker
+	}
+	isBattleEnd := false
+
+	for !isBattleEnd {
 		if player1.IsTurn {
 			if !isAlive(player1Pokemon) {
 				fmt.Println(player1Pokemon.Name, "is dead")
@@ -94,6 +104,9 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 					conn.WriteToUDP([]byte(fmt.Sprintf("%s has no pokemon left. You wins.\n", player1.Name)), addr2)
 					winner = player2
 					loser = player1
+					addExp(winner, loser, conn, winner.Inventory, *player2Pokemons, *player1Pokemons)
+					isBattleEnd = true
+
 					break
 				} else {
 					fmt.Println("Player 1 switched to", player1Pokemon.Name)
@@ -117,6 +130,8 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 				winner = player2
 				loser = player1
 				//addExp(winner, loser, conn, *player2Pokemons, *player1Pokemons)
+				addExp(winner, loser, conn, winner.Inventory, *player2Pokemons, *player1Pokemons)
+				isBattleEnd = true
 				break
 			case "?":
 				displayCommandsList(conn, addr1)
@@ -124,8 +139,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 
 			player1.IsTurn = false
 			player2.IsTurn = true
-		}
-		if player2.IsTurn {
+		} else if player2.IsTurn {
 			if !isAlive(player2Pokemon) {
 				fmt.Println(player2Pokemon.Name, "is dead")
 				conn.WriteToUDP([]byte(fmt.Sprintf("%s is dead\n", player2Pokemon.Name)), addr2)
@@ -137,6 +151,8 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 					conn.WriteToUDP([]byte(fmt.Sprintf("%s has no pokemon left. You wins.\n", player2.Name)), addr1)
 					winner = player1
 					loser = player2
+					addExp(winner, loser, conn, winner.Inventory, *player1Pokemons, *player2Pokemons)
+					isBattleEnd = true
 					break
 				} else {
 					fmt.Printf("%s switched to %s", player2.Name, player2Pokemon.Name)
@@ -159,7 +175,9 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 				surrender(player2, player1, conn, player2.Addr, player1.Addr)
 				winner = player1
 				loser = player2
-				//addExp(winner, loser, conn, *player1Pokemons, *player2Pokemons)
+				addExp(winner, loser, conn, winner.Inventory, *player1Pokemons, *player2Pokemons)
+				isBattleEnd = true
+
 				break
 			case "?":
 				displayCommandsList(conn, addr2)
@@ -172,6 +190,7 @@ func battleScene(player1 *Player, player2 *Player, conn *net.UDPConn, addr1, add
 		time.Sleep(500 * time.Millisecond)
 	}
 	fmt.Printf("%s won against %s \n", winner.Name, loser.Name)
+
 }
 
 func surrender(loser *Player, winner *Player, conn *net.UDPConn, loserAddr, winnerAddr *net.UDPAddr) {
@@ -226,12 +245,20 @@ func attack(attacker *Pokemon, defender *Pokemon, conn *net.UDPConn, attackerAdd
 		conn.WriteToUDP([]byte(fmt.Sprintf("%s missed!\n", attacker.Name)), attackerAddr)
 		conn.WriteToUDP([]byte(fmt.Sprintf("%s missed!\n", attacker.Name)), defenderAddr)
 	} else {
-		fmt.Println(attacker.Name, "attacked", defender.Name, "with", attackerMove.Name, "and dealt", dmg, "damage")
-		conn.WriteToUDP([]byte(fmt.Sprintf("%s attacked %s with %s and dealt %.2f damage\n", attacker.Name, defender.Name, attackerMove.Name, dmg)), attackerAddr)
-		defender.Stats.HP -= dmg
-		conn.WriteToUDP([]byte(fmt.Sprintf("%s got %.2f HP left\n", defender.Name, defender.Stats.HP)), attackerAddr)
+		if dmg == 0 {
+			defender.Stats.Defense -= attackerDmg / 10
+			fmt.Println(attacker.Name, "attacked", defender.Name, "with", attackerMove.Name, "and dealt", dmg, "damage")
+			conn.WriteToUDP([]byte(fmt.Sprintf("%s dealt %.2f damage and lower %s's Defense by %.2f\n", attacker.Name, dmg, defender.Name, attackerDmg/10)), attackerAddr)
+			conn.WriteToUDP([]byte(fmt.Sprintf("%s's defense was lower by %.2f, current Def = %.2f\n", defender.Name, attackerDmg/10, defender.Stats.Defense)), defenderAddr)
 
-		conn.WriteToUDP([]byte(fmt.Sprintf("%s was attacked and lost %s HP\n %.2f HP left\n", defender.Name, dmg, defender.Stats.HP)), defenderAddr)
+		} else {
+			fmt.Println(attacker.Name, "attacked", defender.Name, "with", attackerMove.Name, "and dealt", dmg, "damage")
+			conn.WriteToUDP([]byte(fmt.Sprintf("%s attacked %s with %s and dealt %.2f damage\n", attacker.Name, defender.Name, attackerMove.Name, dmg)), attackerAddr)
+			defender.Stats.HP -= dmg
+			conn.WriteToUDP([]byte(fmt.Sprintf("%s got %.2f HP left\n", defender.Name, defender.Stats.HP)), attackerAddr)
+
+			conn.WriteToUDP([]byte(fmt.Sprintf("%s was attacked and lost %.2f HP\n %.2f HP left\n", defender.Name, dmg, defender.Stats.HP)), defenderAddr)
+		}
 
 	}
 }
@@ -397,38 +424,44 @@ func selectPokemon(player *Player, conn *net.UDPConn, addr *net.UDPAddr) *[]Poke
 	return &selectedPokemons
 }
 
-// NOT DONE
-func addExp(winner *Player, loser *Player, conn *net.UDPConn, winnerPokemons []Pokemon, loserPokemons []Pokemon) {
+func addExp(winner *Player, loser *Player, conn *net.UDPConn, winnerPokermons []Pokemon, winnerBattlePokemons []Pokemon, loserPokemons []Pokemon) {
 	totalExp := 0
 	for _, pokemon := range loserPokemons {
-		totalExp += pokemon.Exp * pokemon.Level
+		totalExp += pokemon.Exp
 	}
-	for _, pokemon := range winnerPokemons {
-		pokemon.Exp += totalExp
-		pokemon.Level = calculateLevel(pokemon.Exp)
-		checkLevel(&pokemon, winner)
+	if totalExp == 0 {
+		totalExp = 10
 	}
+	for i := range winnerPokermons {
+		if isContain(winnerBattlePokemons, winnerPokermons[i]) {
+			winnerPokermons[i].Exp += totalExp
+			winnerPokermons[i].Level = calculateLevel(winnerPokermons[i].Exp)
+			conn.WriteToUDP([]byte(fmt.Sprintf("%s leveled up to %d", winnerPokermons[i].Name, winnerPokermons[i].Level)), winner.Addr)
 
+			if winnerPokermons[i].Level >= winnerPokermons[i].EvolutionLevel && winnerPokermons[i].NextEvolution != "" {
+				conn.WriteToUDP([]byte(fmt.Sprintf("%s evolved to %s", winnerPokermons[i].Name, winnerPokermons[i].NextEvolution)), winner.Addr)
+				evo := *getPokemon(winnerPokermons[i].NextEvolution)
+				evo.Exp = winnerPokermons[i].Exp
+				evo.Level = winnerPokermons[i].Level
+				winnerPokermons[i] = evo
+			}
+		}
+	}
+	winner.Inventory = winnerPokermons
+	SavePlayerData(winner)
 }
 
 func calculateLevel(exp int) int {
 	var level int
-	for i := 1; i < exp; i *= 7 {
+	for i := 1; i < exp; i *= 3 {
 		level += 1
 	}
 	return level
 }
-func checkLevel(pokemon *Pokemon, player *Player) {
-	if pokemon.Level > pokemon.EvolutionLevel && pokemon.EvolutionLevel != 0 {
-		pokemon = getPokemon(pokemon.NextEvolution)
-	}
-	player.Lock() // Lock the player instance
-	defer player.Unlock()
-	player.Inventory = append(player.Inventory, *pokemon)
-}
+
 func getPokemon(PokemonName string) *Pokemon {
 	// Read the JSON file
-	data, err := os.ReadFile("./lib/pokedex.json")
+	data, err := os.ReadFile("../lib/pokedex.json")
 	if err != nil {
 		return nil
 	}
