@@ -305,7 +305,7 @@ func HandlePlayerLogin(idStr, playerName string, x, y int, conn *net.UDPConn, ad
 	// File name based on player's name
 	playerFileName := playerName + ".json"
 	player := &Player{ID: idStr, Name: playerName, PlayerCoordinateX: x, PlayerCoordinateY: y, Addr: addr}
-
+	addr1 := addr.Port
 	// Check if player file exists and load data if present
 	if _, err := os.Stat(playerFileName); err == nil {
 		// Load existing player data from the JSON file
@@ -319,6 +319,8 @@ func HandlePlayerLogin(idStr, playerName string, x, y int, conn *net.UDPConn, ad
 			fmt.Println("Error unmarshalling player data:", err)
 			return nil
 		}
+		player.Addr.Port = addr1
+		player.ID = idStr
 		fmt.Println("Loaded existing player:", playerName)
 	} else {
 		// New player, save to a JSON file

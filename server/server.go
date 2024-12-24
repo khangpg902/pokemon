@@ -83,6 +83,10 @@ func main() {
 			if err != nil {
 				fmt.Println("Error sending world map to client:", err)
 			}
+			_, err = conn.WriteToUDP([]byte(PokeCat(idStr, playerName, player.PlayerCoordinateX, player.PlayerCoordinateY, conn, addr)), addr)
+			if err != nil {
+				fmt.Println("Error sending world map to client:", err)
+			}
 		case "INFO":
 			// Send player info
 			playerInfo := fmt.Sprintf("Player Info: %s", idStr)
@@ -94,8 +98,7 @@ func main() {
 		case "DISCONNECT":
 			// Handle disconnect
 			fmt.Println("Disconnected from server.")
-			return
-
+			delete(players, idStr)
 		case "UP", "DOWN", "LEFT", "RIGHT":
 			// Handle player movement
 			var moveMessage string
@@ -104,8 +107,10 @@ func main() {
 			} else {
 				moveMessage = movePlayer(idStr, strings.ToUpper(parts[0]), parts[1], conn, addr)
 			}
-
-			_, err := conn.WriteToUDP([]byte(moveMessage), addr)
+			for _, player := range players {
+				conn.WriteToUDP([]byte(moveMessage), player.Addr)
+			}
+			//_, err := conn.WriteToUDP([]byte(moveMessage), addr)
 			if err != nil {
 				fmt.Println("Error sending movement message to client:", err)
 			}
